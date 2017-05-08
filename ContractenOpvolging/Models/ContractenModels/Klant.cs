@@ -17,8 +17,9 @@ namespace ContractenOpvolging.Models.ContractenModels
         public string Contactpersoon { get; set; }
         public string Telefoon { get; set; }
         public string Email { get; set; }
-
         //public Adres Adres { get; set; } to-Do add Complex Type Adres
+
+        //test voor nieuwe branch
 
     }
 }
