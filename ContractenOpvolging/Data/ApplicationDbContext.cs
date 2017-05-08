@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using ContractenOpvolging.Models;
+using ContractenOpvolging.Models.ContractenModels;
 
 namespace ContractenOpvolging.Data
 {
@@ -14,6 +15,10 @@ namespace ContractenOpvolging.Data
             : base(options)
         {
         }
+
+        public DbSet<Klant> Klanten { get; set; }
+        public DbSet<Contract> Contracten { get; set; }
+        public DbSet<Consultant> Consultants { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

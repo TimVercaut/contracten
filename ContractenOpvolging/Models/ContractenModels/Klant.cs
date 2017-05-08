@@ -19,6 +19,5 @@ namespace ContractenOpvolging.Models.ContractenModels
         public string Telefoon { get; set; }
         public string Email { get; set; }
         public Adres Adres { get; set; } 
-
     }
 }
