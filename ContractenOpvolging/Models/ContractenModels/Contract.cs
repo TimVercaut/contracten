@@ -26,7 +26,13 @@ namespace ContractenOpvolging.Models.ContractenModels
         [DataType(DataType.Currency)]
         public decimal? Kosten { get; set; }
         public Verlenging Verlenging { get; set; }
-
+        public virtual Klant Klant { get; set; }
+        [Required]
+        public int KlantID { get; set; }
+        public int? OnderKlant { get; set; }
+        public virtual Consultant Consultant { get; set; }
+        [Required]
+        public int ConsultantID { get; set; }
     }
 
     public enum Verlenging

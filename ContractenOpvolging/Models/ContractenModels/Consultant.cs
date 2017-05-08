@@ -10,6 +10,7 @@ namespace ContractenOpvolging.Models.ContractenModels
     [Table("Consultants")]
     public class Consultant
     {
+        [Key]
         public int ConsultantID { get; set; }
         [Required]
         public string Voornaam { get; set; }
@@ -20,8 +21,8 @@ namespace ContractenOpvolging.Models.ContractenModels
         [DataType(DataType.EmailAddress)]
         public string Email { get; set; }
         public SoortConsultant Soort { get; set; }
-        public Adres Adres { get; set; }
         public List<Contract> OudeContracten { get; set; }
+
 
         public string Naam  
         {

@@ -1,0 +1,83 @@
+@model ContractenOpvolging.Models.ContractenModels.Contract
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>Contract</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <input type="hidden" asp-for="ContractID" />
+        <dt>
+            @Html.DisplayNameFor(model => model.StartDatum)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.StartDatum)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.EindDatum)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.EindDatum)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Opzegtermijn)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Opzegtermijn)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Randvoorwaarden)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Randvoorwaarden)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Tarief)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Tarief)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Kosten)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Kosten)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Verlenging)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Verlenging)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.OnderKlant)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.OnderKlant)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Consultant)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Consultant.Familienaam)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Klant)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Klant.Naam)
+        </dd>
+    </dl>
+    
+    <form asp-action="Delete">
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            <a asp-action="Index">Back to List</a>
+        </div>
+    </form>
+</div>

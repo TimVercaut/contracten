@@ -1,0 +1,96 @@
+@model ContractenOpvolging.Models.ContractenModels.Contract
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h2>Create</h2>
+
+<form asp-action="Create">
+    <div class="form-horizontal">
+        <h4>Contract</h4>
+        <hr />
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="form-group">
+            <label asp-for="StartDatum" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="StartDatum" class="form-control" />
+                <span asp-validation-for="StartDatum" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="EindDatum" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="EindDatum" class="form-control" />
+                <span asp-validation-for="EindDatum" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="Opzegtermijn" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="Opzegtermijn" class="form-control" />
+                <span asp-validation-for="Opzegtermijn" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="Randvoorwaarden" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="Randvoorwaarden" class="form-control" />
+                <span asp-validation-for="Randvoorwaarden" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="Tarief" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="Tarief" class="form-control" />
+                <span asp-validation-for="Tarief" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="Kosten" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="Kosten" class="form-control" />
+                <span asp-validation-for="Kosten" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="Verlenging" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <select asp-for="Verlenging" class="form-control"></select>
+                <span asp-validation-for="Verlenging" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="KlantID" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <select asp-for="KlantID" class ="form-control" asp-items="ViewBag.KlantID"></select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="OnderKlant" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="OnderKlant" class="form-control" />
+                <span asp-validation-for="OnderKlant" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="ConsultantID" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <select asp-for="ConsultantID" class ="form-control" asp-items="ViewBag.ConsultantID"></select>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Create" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+</form>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

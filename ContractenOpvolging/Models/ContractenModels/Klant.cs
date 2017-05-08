@@ -16,8 +16,15 @@ namespace ContractenOpvolging.Models.ContractenModels
         [Required]
         public string Naam { get; set; }
         public string Contactpersoon { get; set; }
+        [DataType(DataType.PhoneNumber)]
         public string Telefoon { get; set; }
+        [DataType(DataType.EmailAddress)]
         public string Email { get; set; }
-        public Adres Adres { get; set; } 
+        public string Straat { get; set; }
+        public string Huisnummer { get; set; }
+        [DataType(DataType.PostalCode)]
+        public string Postcode { get; set; }
+        public string Gemeente { get; set; }
+        public virtual List<Contract> Contracten { get; set; }
     }
 }
