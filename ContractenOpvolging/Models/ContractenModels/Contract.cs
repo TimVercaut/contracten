@@ -37,6 +37,14 @@ namespace ContractenOpvolging.Models.ContractenModels
         [Required]
         [DisplayName("Consultant")]
         public int ConsultantID { get; set; }
+
+        public bool CheckValid(int maand, int jaar)
+        {
+            var begin = StartDatum.Ticks;
+            var eind = EindDatum.Ticks;
+            var test = new DateTime(jaar, maand, 15).Ticks;
+            return ((begin <= test) && (test <= eind));
+        }
     }
 
     public enum Verlenging

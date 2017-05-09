@@ -7,18 +7,19 @@
     List<Klant> klantLijst = ViewBag.KlantenLijst;
     int maxMaanden;
     var huidigJaar = DateTime.Now.Year;
-    if (ViewBag.Maanden != null)
-    {
-        maxMaanden = ViewBag.Maanden;
-    }
-    else { maxMaanden = 10; }
+    maxMaanden = ViewBag.Maanden;
 }
 
 <h2>Grafisch overzicht</h2>
 <div class="container">
     <div class="row">
-        <a asp-action="Index">Naar overzicht</a>
-        
+        <a asp-action="Index" class="col-md-2">Naar overzicht</a>
+        <div class="col-md-3">
+            <form asp-controller="Contracten" asp-action="MaandenAanpassen" method="post">
+                    <input type="text" name="query" value="" class="search-query" placeholder="Geef aantal maanden" />
+                    <input type="submit" value="Pas aan" class="btn btn-sm"/>
+            </form>
+        </div>
     </div>
 </div>
 
@@ -76,12 +77,16 @@
                     @{
                         for (var i = 0; i < maxMaanden; i++)
                         {
-                            var eindJaar = item.EindDatum.Year;
-                            var eindMaand = item.EindDatum.Month;
-                            var maand = DateTime.Now.AddMonths(i).Month + 1;
-                            if ((eindJaar > huidigJaar) || ((eindJaar == huidigJaar) && (eindMaand > maand)))
+                            var maand = DateTime.Now.AddMonths(i).Month;
+                            var jaar = DateTime.Now.AddMonths(i).Year;
+                            if (item.CheckValid(maand,jaar))
                             {
                                 <td style="background-color:@item.Verlenging"></td>
+                            }
+                            else
+                            {
+                                <td style="background-color:white"></td>
+
                             }
                         }
                     }

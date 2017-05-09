@@ -16,7 +16,7 @@ namespace ContractenOpvolging.Controllers
 
         public ContractenController(ApplicationDbContext context)
         {
-            _context = context;    
+            _context = context;   
         }
 
         private async Task<List<Contract>> GetContracten()
@@ -41,7 +41,26 @@ namespace ContractenOpvolging.Controllers
         {
             var model = GetContracten();
             ViewBag.KlantenLijst =await GetKlanten();
+            ViewBag.Maanden = 6;
             return View(await model);
+        }
+
+        [HttpPost]
+        public async  Task<IActionResult> MaandenAanpassen(string query)
+        {
+            int maanden;
+            if (int.TryParse(query, out maanden))
+            {
+                if (maanden >= 15) { maanden = 15; }
+                ViewBag.Maanden = maanden;
+                var model = GetContracten();
+                ViewBag.KlantenLijst = await GetKlanten();
+                return View("Grafisch", await model);
+            }
+            else
+            {
+                return RedirectToAction("Grafisch");
+            }
         }
 
         // GET: Contracten/Create
