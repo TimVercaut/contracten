@@ -78,8 +78,9 @@
                     @Html.DisplayFor(modelItem => item.Randvoorwaarden)
                 </td>
                 <td>
-                    <a asp-action="Edit" asp-route-id="@item.ContractID">Edit</a> |
-                    <a asp-action="Delete" asp-route-id="@item.ContractID">Delete</a>
+                    <a asp-action="Delete" asp-route-id="@item.ContractID">X</a> |
+                    <a asp-action="Verleng" asp-route-id="@item.ContractID">Verleng</a> |
+                    <a asp-action="VeranderKleur" asp-rout-id="@item.ContractID">Kleur</a>
                 </td>
             </tr>
         }
