@@ -26,5 +26,11 @@ namespace ContractenOpvolging.Models.ContractenModels
         public string Postcode { get; set; }
         public string Gemeente { get; set; }
         public virtual List<Contract> Contracten { get; set; }
+
+        public string Adres
+        {
+            get { return this.Straat + " " + this.Huisnummer; }
+        }
+
     }
 }

@@ -1,0 +1,53 @@
+@model ContractenOpvolging.Models.ContractenModels.Consultant
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>Consultant</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <input type="hidden" asp-for="ConsultantID" />
+        <dt>
+            @Html.DisplayNameFor(model => model.Voornaam)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Voornaam)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Familienaam)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Familienaam)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Telefoon)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Telefoon)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Email)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Email)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Soort)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Soort)
+        </dd>
+    </dl>
+    
+    <form asp-action="Delete">
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            <a asp-action="Index">Back to List</a>
+        </div>
+    </form>
+</div>

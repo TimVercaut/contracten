@@ -26,26 +26,6 @@ namespace ContractenOpvolging.Controllers
             return View(await applicationDbContext.ToListAsync());
         }
 
-        // GET: Contracten/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var contract = await _context.Contracten
-                .Include(c => c.Consultant)
-                .Include(c => c.Klant)
-                .SingleOrDefaultAsync(m => m.ContractID == id);
-            if (contract == null)
-            {
-                return NotFound();
-            }
-
-            return View(contract);
-        }
-
         // GET: Contracten/Create
         public IActionResult Create()
         {

@@ -12,78 +12,61 @@
 <table class="table">
     <thead>
         <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.StartDatum)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.EindDatum)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Opzegtermijn)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Randvoorwaarden)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Tarief)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Kosten)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Verlenging)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.OnderKlant)
-                </th>
             <th>
                 @Html.DisplayNameFor(model => model.Consultant)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Klant)
             </th>
+            <th>
+                @Html.DisplayNameFor(model => model.OnderKlant)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.StartDatum)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EindDatum)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Opzegtermijn)
+            </th>
+
+            <th>
+                @Html.DisplayNameFor(model => model.Randvoorwaarden)
+            </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.StartDatum)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.EindDatum)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Opzegtermijn)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Randvoorwaarden)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Tarief)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Kosten)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Verlenging)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.OnderKlant)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Consultant.Familienaam)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Klant.Naam)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.ContractID">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.ContractID">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.ContractID">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Consultant.Naam)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Klant.Naam)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.OnderKlant)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.StartDatum)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.EindDatum)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Opzegtermijn)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Randvoorwaarden)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.ContractID">Edit</a> |
+                    <a asp-action="Delete" asp-route-id="@item.ContractID">Delete</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

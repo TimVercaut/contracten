@@ -23,7 +23,7 @@ namespace ContractenOpvolging.Models.ContractenModels
         [DataType(DataType.MultilineText)]
         public string Randvoorwaarden { get; set; }
         [DataType(DataType.Currency)]
-        public decimal Tarief { get; set; }
+        public decimal? Tarief { get; set; }
         [DataType(DataType.Currency)]
         public decimal? Kosten { get; set; }
         public Verlenging Verlenging { get; set; }

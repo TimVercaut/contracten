@@ -1,0 +1,64 @@
+@using ContractenOpvolging.Models.ContractenModels;
+@model Consultant
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h2>Create</h2>
+
+<form asp-action="Create">
+    <div class="form-horizontal">
+        <h4>Consultant</h4>
+        <hr />
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="form-group">
+            <label asp-for="Voornaam" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="Voornaam" class="form-control" />
+                <span asp-validation-for="Voornaam" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="Familienaam" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="Familienaam" class="form-control" />
+                <span asp-validation-for="Familienaam" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="Telefoon" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="Telefoon" class="form-control" />
+                <span asp-validation-for="Telefoon" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="Email" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="Email" class="form-control" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="Soort" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <select asp-for="Soort" class="form-control" asp-items="Html.GetEnumSelectList<SoortConsultant>()"></select>
+                <span asp-validation-for="Soort" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Create" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+</form>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
