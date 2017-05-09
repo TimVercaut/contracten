@@ -9,9 +9,10 @@ using ContractenOpvolging.Models.ContractenModels;
 namespace ContractenOpvolging.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20170509062823_ContractenUpdate")]
+    partial class ContractenUpdate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.1")
@@ -96,19 +97,25 @@ namespace ContractenOpvolging.Data.Migrations
 
                     b.Property<int>("ConsultantID");
 
-                    b.Property<DateTime>("EindDatum");
+                    b.Property<DateTime>("EindDatum")
+                        .HasColumnName("Einddatum")
+                        .HasColumnType("date");
 
-                    b.Property<int>("KlantID");
+                    b.Property<int>("KlantID")
+                        .HasColumnName("Klant");
 
                     b.Property<decimal?>("Kosten");
 
-                    b.Property<int?>("OnderKlant");
+                    b.Property<int?>("OnderKlant")
+                        .HasColumnName("Subklant");
 
                     b.Property<string>("Opzegtermijn");
 
                     b.Property<string>("Randvoorwaarden");
 
-                    b.Property<DateTime>("StartDatum");
+                    b.Property<DateTime>("StartDatum")
+                        .HasColumnName("Startdatum")
+                        .HasColumnType("date");
 
                     b.Property<decimal>("Tarief");
 

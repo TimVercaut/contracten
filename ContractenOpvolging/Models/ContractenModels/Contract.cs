@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel;
 
 namespace ContractenOpvolging.Models.ContractenModels
 {
@@ -12,10 +13,10 @@ namespace ContractenOpvolging.Models.ContractenModels
     {
         [Key]
         public int ContractID { get; set; }
-        [Column(TypeName = "date")]
+        [DisplayName("Startdatum")]
         [DataType(DataType.Date)]
         public DateTime StartDatum { get; set; }
-        [Column(TypeName = "date")]
+        [DisplayName("Einddatum")]
         [DataType(DataType.Date)]
         public DateTime EindDatum { get; set; }
         public string Opzegtermijn { get; set; }
@@ -28,7 +29,9 @@ namespace ContractenOpvolging.Models.ContractenModels
         public Verlenging Verlenging { get; set; }
         public virtual Klant Klant { get; set; }
         [Required]
+        [DisplayName("Klant")]
         public int KlantID { get; set; }
+        [DisplayName("Subklant")]
         public int? OnderKlant { get; set; }
         public virtual Consultant Consultant { get; set; }
         [Required]

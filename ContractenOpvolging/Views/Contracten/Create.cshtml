@@ -56,35 +56,27 @@
         <div class="form-group">
             <label asp-for="Verlenging" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                <select asp-for="Verlenging" asp-items="Html.GetEnumSelectList<ContractenOpvolging.Models.ContractenModels.Verlenging>()" class="form-control">
-                    <option selected="selected" value="">--Selecteer een kleur--</option>
-                </select>
+                <select asp-for="Verlenging" class="form-control"></select>
                 <span asp-validation-for="Verlenging" class="text-danger"></span>
             </div>
         </div>
         <div class="form-group">
             <label asp-for="KlantID" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                <select asp-for="KlantID" class ="form-control" asp-items="ViewBag.KlantID">
-                    <option selected="selected" value="">--Selecteer de klant--</option>
-                </select>
+                <select asp-for="KlantID" class ="form-control" asp-items="ViewBag.KlantID"></select>
             </div>
         </div>
         <div class="form-group">
             <label asp-for="OnderKlant" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                <select asp-for="OnderKlant" class="form-control" asp-items="ViewBag.KlantID">
-                    <option selected="selected" value = null>--(Optioneel subklant)--</option>
-                </select>
+                <input asp-for="OnderKlant" class="form-control" />
                 <span asp-validation-for="OnderKlant" class="text-danger"></span>
             </div>
         </div>
         <div class="form-group">
             <label asp-for="ConsultantID" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                <select asp-for="ConsultantID" class ="form-control" asp-items="ViewBag.ConsultantID">
-                    <option selected="selected" value="">--Selecteer de consultant--</option>
-                </select>
+                <select asp-for="ConsultantID" class ="form-control" asp-items="ViewBag.ConsultantID"></select>
             </div>
         </div>
         <div class="form-group">
