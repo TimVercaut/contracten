@@ -35,6 +35,7 @@ namespace ContractenOpvolging.Models.ContractenModels
         public int? OnderKlant { get; set; }
         public virtual Consultant Consultant { get; set; }
         [Required]
+        [DisplayName("Consultant")]
         public int ConsultantID { get; set; }
     }
 

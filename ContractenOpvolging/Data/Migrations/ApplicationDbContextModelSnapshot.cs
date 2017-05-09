@@ -4,7 +4,6 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using ContractenOpvolging.Data;
-using ContractenOpvolging.Models.ContractenModels;
 
 namespace ContractenOpvolging.Data.Migrations
 {
