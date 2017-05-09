@@ -19,9 +19,12 @@ namespace ContractenOpvolging.Controllers
             _context = context;   
         }
 
-        private async Task<List<Contract>> GetContracten()
+        private async Task<List<Contract>> GetContractenByDate()
         {
-            return (await _context.Contracten.Include(c => c.Consultant).Include(c => c.Klant).ToListAsync());
+            return await _context.Contracten.OrderBy(c => c.EindDatum)
+                                            .Include(c => c.Consultant)
+                                            .Include(c => c.Klant)
+                                            .ToListAsync();
         }
 
         private async Task<List<Klant>> GetKlanten()
@@ -32,14 +35,17 @@ namespace ContractenOpvolging.Controllers
         // GET: Contracten
         public async Task<IActionResult> Index()
         {
-            var model = GetContracten();
+            var model = _context.Contracten.OrderBy(c => c.Consultant.Familienaam)
+                                           .Include(c => c.Consultant)
+                                           .Include(c => c.Klant)
+                                           .ToListAsync();
             ViewBag.KlantenLijst =await GetKlanten();
             return View(await model);
         }
 
         public async Task<IActionResult> Grafisch()
         {
-            var model = GetContracten();
+            var model = GetContractenByDate();
             ViewBag.KlantenLijst =await GetKlanten();
             ViewBag.Maanden = 6;
             return View(await model);
@@ -53,7 +59,7 @@ namespace ContractenOpvolging.Controllers
             {
                 if (maanden >= 15) { maanden = 15; }
                 ViewBag.Maanden = maanden;
-                var model = GetContracten();
+                var model = GetContractenByDate();
                 ViewBag.KlantenLijst = await GetKlanten();
                 return View("Grafisch", await model);
             }
