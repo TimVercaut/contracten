@@ -1,7 +1,9 @@
-@model IEnumerable<ContractenOpvolging.Models.ContractenModels.Contract>
+@using ContractenOpvolging.Models.ContractenModels;
+@model IEnumerable<Contract>
 
 @{
     ViewData["Title"] = "Index";
+    List<Klant> klantLijst = ViewBag.KlantenLijst; 
 }
 
 <h2>Index</h2>
@@ -40,15 +42,26 @@
     <tbody>
         @foreach (var item in Model)
         {
+            Klant klant;
+            if(item.OnderKlant != null || item.OnderKlant != -1)
+            {
+                 klant = (from k in klantLijst
+                             where k.KlantID == item.OnderKlant
+                             select k).FirstOrDefault();
+            }
+            else
+            {
+                klant = null;
+            }
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Consultant.Naam)
+                    <a asp-controller="Consultants" asp-action="Details" asp-route-id="@item.ConsultantID">@Html.DisplayFor(modelItem => item.Consultant.Naam)</a>
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Klant.Naam)
+                    <a asp-controller="Klanten" asp-action="Details" asp-route-id="@item.KlantID">@Html.DisplayFor(modelItem => item.Klant.Naam)</a>
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.OnderKlant)
+                    <a asp-controller="Klanten" asp-action="Details" asp-route-id="@item.OnderKlant">@Html.DisplayFor(modelItem => klant.Naam)</a>
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.StartDatum)

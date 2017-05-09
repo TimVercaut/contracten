@@ -23,13 +23,14 @@ namespace ContractenOpvolging.Controllers
         public async Task<IActionResult> Index()
         {
             var applicationDbContext = _context.Contracten.Include(c => c.Consultant).Include(c => c.Klant);
+            ViewBag.KlantenLijst = _context.Klanten.ToList();
             return View(await applicationDbContext.ToListAsync());
         }
 
         // GET: Contracten/Create
         public IActionResult Create()
         {
-            ViewData["ConsultantID"] = new SelectList(_context.Consultants, "ConsultantID", "Familienaam");
+            ViewData["ConsultantID"] = new SelectList(_context.Consultants, "ConsultantID", "Naam");
             ViewData["KlantID"] = new SelectList(_context.Klanten, "KlantID", "Naam");
             return View();
         }
