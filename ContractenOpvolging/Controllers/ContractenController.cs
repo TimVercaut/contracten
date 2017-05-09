@@ -19,12 +19,29 @@ namespace ContractenOpvolging.Controllers
             _context = context;    
         }
 
+        private async Task<List<Contract>> GetContracten()
+        {
+            return (await _context.Contracten.Include(c => c.Consultant).Include(c => c.Klant).ToListAsync());
+        }
+
+        private async Task<List<Klant>> GetKlanten()
+        {
+            return await _context.Klanten.ToListAsync();
+        }
+
         // GET: Contracten
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Contracten.Include(c => c.Consultant).Include(c => c.Klant);
-            ViewBag.KlantenLijst = _context.Klanten.ToList();
-            return View(await applicationDbContext.ToListAsync());
+            var model = GetContracten();
+            ViewBag.KlantenLijst =await GetKlanten();
+            return View(await model);
+        }
+
+        public async Task<IActionResult> Grafisch()
+        {
+            var model = GetContracten();
+            ViewBag.KlantenLijst =await GetKlanten();
+            return View(await model);
         }
 
         // GET: Contracten/Create

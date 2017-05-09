@@ -1,0 +1,91 @@
+@using ContractenOpvolging.Models.ContractenModels;
+@using System.Globalization;
+@model IEnumerable<Contract>
+
+@{
+    ViewData["Title"] = "Grafisch";
+    List<Klant> klantLijst = ViewBag.KlantenLijst;
+    int maxMaanden;
+    var huidigJaar = DateTime.Now.Year;
+    if (ViewBag.Maanden != null)
+    {
+        maxMaanden = ViewBag.Maanden;
+    }
+    else { maxMaanden = 10; }
+}
+
+<h2>Grafisch overzicht</h2>
+<div class="container">
+    <div class="row">
+        <a asp-action="Index">Naar overzicht</a>
+        
+    </div>
+</div>
+
+<table class="table" id="tabel">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Consultant)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Klant)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.OnderKlant)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EindDatum)
+            </th>
+            @{
+                for (int i = 0; i < maxMaanden; i++)
+                {
+                    <th style="text-align:right">@DateTime.Now.AddMonths(i).ToString("MMM", CultureInfo.InvariantCulture)</th>
+                }
+            }
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+            {
+                Klant klant;
+                if (item.OnderKlant != null || item.OnderKlant != -1)
+                {
+                    klant = (from k in klantLijst
+                             where k.KlantID == item.OnderKlant
+                             select k).FirstOrDefault();
+                }
+                else
+                {
+                    klant = null;
+                }
+                <tr>
+                    <td>
+                        <a asp-controller="Consultants" asp-action="Details" asp-route-id="@item.ConsultantID">@Html.DisplayFor(modelItem => item.Consultant.Naam)</a>
+                    </td>
+                    <td>
+                        <a asp-controller="Klanten" asp-action="Details" asp-route-id="@item.KlantID">@Html.DisplayFor(modelItem => item.Klant.Naam)</a>
+                    </td>
+                    <td>
+                        <a asp-controller="Klanten" asp-action="Details" asp-route-id="@item.OnderKlant">@Html.DisplayFor(modelItem => klant.Naam)</a>
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.EindDatum)
+                    </td>
+
+                    @{
+                        for (var i = 0; i < maxMaanden; i++)
+                        {
+                            var eindJaar = item.EindDatum.Year;
+                            var eindMaand = item.EindDatum.Month;
+                            var maand = DateTime.Now.AddMonths(i).Month + 1;
+                            if ((eindJaar > huidigJaar) || ((eindJaar == huidigJaar) && (eindMaand > maand)))
+                            {
+                                <td style="background-color:@item.Verlenging"></td>
+                            }
+                        }
+                    }
+                </tr>
+                        }
+    </tbody>
+</table>
