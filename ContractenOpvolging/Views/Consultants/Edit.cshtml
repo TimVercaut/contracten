@@ -1,4 +1,5 @@
-@model ContractenOpvolging.Models.ContractenModels.Consultant
+@using ContractenOpvolging.Models.ContractenModels;
+@model Consultant
 
 @{
     ViewData["Title"] = "Edit";
@@ -43,7 +44,7 @@
         <div class="form-group">
             <label asp-for="Soort" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                <select asp-for="Soort" class="form-control"></select>
+                <select asp-for="Soort" class="form-control" asp-items="Html.GetEnumSelectList<SoortConsultant>()"></select>
                 <span asp-validation-for="Soort" class="text-danger"></span>
             </div>
         </div>
