@@ -47,6 +47,13 @@ namespace ContractenOpvolging
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
+            services.Configure<IdentityOptions>(options =>
+            {
+                options.Password.RequireDigit = true;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequiredLength = 6;
+            });
+
             services.AddMvc();
 
             // Add application services.
@@ -74,6 +81,7 @@ namespace ContractenOpvolging
             app.UseStaticFiles();
 
             app.UseIdentity();
+
 
             // Add external authentication middleware below. To configure them please see https://go.microsoft.com/fwlink/?LinkID=532715
 

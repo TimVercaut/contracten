@@ -7,16 +7,18 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ContractenOpvolging.Data;
 using ContractenOpvolging.Models.ContractenModels;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ContractenOpvolging.Controllers
 {
+    [Authorize]
     public class ContractenController : Controller
     {
         private readonly ApplicationDbContext _context;
 
         public ContractenController(ApplicationDbContext context)
         {
-            _context = context;   
+            _context = context;
         }
 
         private async Task<List<Contract>> GetContractenByDate()
@@ -32,40 +34,77 @@ namespace ContractenOpvolging.Controllers
             return await _context.Klanten.ToListAsync();
         }
 
+        public async Task<List<Contract>> GetContractenByName(string query = "")
+        {
+            return await _context.Contracten.Where(c => c.Consultant.Familienaam.StartsWith(query))
+                                            .OrderBy(c => c.Consultant.Familienaam)
+                                            .Include(c => c.Consultant)
+                                            .Include(c => c.Klant)
+                                            .ToListAsync();
+        }
+
         // GET: Contracten
         public async Task<IActionResult> Index()
         {
-            var model = _context.Contracten.OrderBy(c => c.Consultant.Familienaam)
-                                           .Include(c => c.Consultant)
-                                           .Include(c => c.Klant)
-                                           .ToListAsync();
-            ViewBag.KlantenLijst =await GetKlanten();
-            return View(await model);
+            ViewBag.KlantenLijst = await GetKlanten();
+            return View(await GetContractenByName());
         }
 
         public async Task<IActionResult> Grafisch()
         {
-            var model = GetContractenByDate();
-            ViewBag.KlantenLijst =await GetKlanten();
+            ViewBag.KlantenLijst = await GetKlanten();
             ViewBag.Maanden = 6;
-            return View(await model);
+            return View(await GetContractenByDate());
         }
 
         [HttpPost]
-        public async  Task<IActionResult> MaandenAanpassen(string query)
+        public async Task<IActionResult> MaandenAanpassen(string query)
         {
             int maanden;
             if (int.TryParse(query, out maanden))
             {
-                if (maanden >= 15) { maanden = 15; }
+                if (maanden >= 15) { maanden = 15; } //Never show more than 15 months
                 ViewBag.Maanden = maanden;
-                var model = GetContractenByDate();
                 ViewBag.KlantenLijst = await GetKlanten();
-                return View("Grafisch", await model);
+                return View("Grafisch", await GetContractenByDate());
             }
             else
             {
                 return RedirectToAction("Grafisch");
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ConsultantZoeken(string query)
+        {
+            if (query != null)
+            {
+                ViewBag.KlantenLijst = await GetKlanten();
+                return View("Index", await GetContractenByName(query));
+            }
+            else
+            {
+                return RedirectToAction("Index");
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> KlantZoeken(string query)
+        {
+            if (query != null)
+            {
+                ViewBag.KlantenLijst = await GetKlanten();
+                var model = _context.Contracten
+                                    .Where(c => c.Klant.Naam.StartsWith(query))
+                                    .OrderBy(c => c.Consultant.Familienaam)
+                                    .Include(c => c.Consultant)
+                                    .Include(c => c.Klant)
+                                    .ToListAsync();
+                return View("Index", model);
+            }
+            else
+            {
+                return RedirectToAction("Index");
             }
         }
 

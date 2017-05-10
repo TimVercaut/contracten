@@ -6,12 +6,23 @@
     List<Klant> klantLijst = ViewBag.KlantenLijst; 
 }
 
-<h2>Index</h2>
+<h2>Alle contracten</h2>
 
 <div class="container">
     <div class="row">
-        <a asp-action="Create" class="col-md-2">Nieuw Contract</a>
-        <a asp-action="Grafisch" class="col-md-2">Grafische voorstelling</a>
+        <a asp-action="Create" class="col-md-4">Nieuw Contract</a>
+        <a asp-action="Grafisch" class="col-md-4">Grafische voorstelling</a>
+    </div>
+    <hr/>
+    <div class="row">
+        <form asp-controller="Contracten" asp-action="KlantZoeken" method="post" class="col-md-4">
+            <input type="text" name="query" value="" class="search-query" placeholder="Geef klantnaam..." />
+            <input type="submit" value="Klant zoeken" class="btn btn-sm" />
+        </form>
+        <form asp-controller="Contracten" asp-action="ConsultantZoeken" method="post" class="col-md-4">
+            <input type="text" name="query" value="" class="search-query" placeholder="Geef familienaam..." />
+            <input type="submit" value="Consultant zoeken" class="btn btn-sm" />
+        </form>
     </div>
 </div>
 <table class="table">

@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ContractenOpvolging.Data;
 using ContractenOpvolging.Models.ContractenModels;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ContractenOpvolging.Controllers
 {
+    [Authorize]
     public class KlantenController : Controller
     {
         private readonly ApplicationDbContext _context;
