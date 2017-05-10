@@ -4,11 +4,10 @@
     ViewData["Title"] = "Edit";
 }
 
-<h2>Edit</h2>
+<h2>Aanpassen klanteninformatie</h2>
 
 <form asp-action="Edit">
     <div class="form-horizontal">
-        <h4>Klant</h4>
         <hr />
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <input type="hidden" asp-for="KlantID" />
@@ -77,7 +76,7 @@
 </form>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index">Naar overzicht</a>
 </div>
 
 @section Scripts {
