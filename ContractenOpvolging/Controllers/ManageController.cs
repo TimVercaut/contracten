@@ -340,7 +340,6 @@ namespace ContractenOpvolging.Controllers
             }
             return RedirectToAction(nameof(ManageLogins), new { Message = message });
         }
-
         #region Helpers
 
         private void AddErrors(IdentityResult result)

@@ -1,0 +1,35 @@
+@model IEnumerable<ContractenOpvolging.Models.ApplicationRoleListViewModel>
+
+@{
+    ViewData["Title"] = "Roles";
+}
+
+<h2>Roles</h2>
+
+<a asp-action="Index" class="btn-bracketed">Users</a>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.RoleName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RoleName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

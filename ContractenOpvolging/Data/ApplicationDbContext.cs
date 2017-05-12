@@ -9,7 +9,7 @@ using ContractenOpvolging.Models.ContractenModels;
 
 namespace ContractenOpvolging.Data
 {
-    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, string>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
@@ -27,5 +27,13 @@ namespace ContractenOpvolging.Data
             // For example, you can rename the ASP.NET Identity table names and more.
             // Add your customizations after calling base.OnModelCreating(builder);
         }
+
+        public DbSet<ContractenOpvolging.Models.UserListViewModel> UserListViewModel { get; set; }
+
+        public DbSet<ContractenOpvolging.Models.ApplicationRoleListViewModel> ApplicationRoleListViewModel { get; set; }
+
+        public DbSet<ContractenOpvolging.Models.UserViewModel> UserViewModel { get; set; }
+
+        //public DbSet<ContractenOpvolging.Models.UserViewModel> UserViewModel { get; set; }
     }
 }
