@@ -100,7 +100,7 @@ namespace ContractenOpvolging.Controllers
                                     .Include(c => c.Consultant)
                                     .Include(c => c.Klant)
                                     .ToListAsync();
-                return View("Index", model);
+                return View("Index",await model);
             }
             else
             {

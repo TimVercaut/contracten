@@ -1,27 +1,35 @@
-@model ContractenOpvolging.Models.UserViewModel
+@model ContractenOpvolging.Models.AddRoleViewModel
 
 @{
     ViewData["Title"] = "AddRole";
 }
 
-<h2>AddRoleToUser</h2>
+<h2>Rol aanpassen</h2>
 
-<form asp-action="AddRoleToUser">
+<form asp-action="AddRole">
     <div class="form-horizontal">
-        <h4>UserViewModel</h4>
+        <h4>User</h4>
         <hr />
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-    <input type="hidden" asp-for="Id" />
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(modelItem => Model.Email)
+            </dt>
+            <dd>
+                @Html.DisplayFor(modelItem => Model.Email)
+            </dd>
+        </dl>
         <div class="form-group">
-            <label asp-for="Email" class="col-md-2 control-label"></label>
+            <label asp-for="ApplicationRoleId" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                <input asp-for="Email" class="form-control" />
-                <span asp-validation-for="Email" class="text-danger"></span>
+                <select asp-for="ApplicationRoleId" class="form-control" asp-items="@Model.ApplicationRoles">
+                    <option selected="selected" value="">--Selecteer een rol--</option>
+                </select>
             </div>
         </div>
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Save" class="btn btn-default" />
+                <input type="submit" value="Save" class="btn btn btn-success" />
             </div>
         </div>
     </div>

@@ -112,7 +112,7 @@ namespace ContractenOpvolging.Controllers
             ViewData["ReturnUrl"] = returnUrl;
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+                var user = new ApplicationUser { UserName = model.Email, Email = model.Email};
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
@@ -124,6 +124,8 @@ namespace ContractenOpvolging.Controllers
                     //    $"Please confirm your account by clicking this link: <a href='{callbackUrl}'>link</a>");
                     await _signInManager.SignInAsync(user, isPersistent: false);
                     _logger.LogInformation(3, "User created a new account with password.");
+                    
+                    await _userManager.AddToRoleAsync(user, "Gebruiker");
                     return RedirectToLocal(returnUrl);
                 }
                 AddErrors(result);
