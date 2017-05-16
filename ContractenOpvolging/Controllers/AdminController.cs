@@ -7,7 +7,6 @@ using ContractenOpvolging.Data;
 using ContractenOpvolging.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using ContractenOpvolging.Services;
 
 namespace ContractenOpvolging.Controllers
 {
@@ -25,18 +24,6 @@ namespace ContractenOpvolging.Controllers
             this.roleManager = roleManager;
             this.context = context;
         }
-
-        //public async Task<IActionResult> Index()
-        //{
-        //    var model = new List<UserListViewModel>();
-        //    model = await userManager.Users.Select(u => new UserListViewModel
-        //    {
-        //        Id = u.Id,
-        //        Email = u.Email,
-        //    }).ToListAsync();
-
-        //    return View(model);
-        //}
 
         public IActionResult Index()
         {
@@ -92,22 +79,58 @@ namespace ContractenOpvolging.Controllers
         [HttpPost]
         public async Task<IActionResult> AddRole(string id, AddRoleViewModel user)
         {
-
-            var rolNaam = (from roles in context.Roles
-                           where roles.Id == user.ApplicationRoleId
-                           select roles.NormalizedName).FirstOrDefault();
+            var rolNaam = await roleManager.FindByIdAsync(user.ApplicationRoleId);
 
             if (ModelState.IsValid)
             {
                 var _user = userManager.FindByIdAsync(user.Id);
-                //if (!context.Users.Find(user.Id).Roles.ToString().Contains(rolNaam))
-                await userManager.AddToRoleAsync(await _user, rolNaam);
+                await userManager.AddToRoleAsync(await _user, rolNaam.NormalizedName);
                 return RedirectToAction("Index");
             }
             else
             {
                 return RedirectToAction("AddRole", user.Id);
             }
+        }
+
+        public IActionResult ResetRoles(string id)
+        {
+            var user = context.Users.Find(id);
+            if (user != null) {
+                var model = new ResetRolesViewModel
+                {
+                    Id = user.Id,
+                    Email = user.Email
+                };
+            return View(model);
+            }
+            else
+            {
+                return RedirectToAction("Index");
+            }
+            
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Reset(string id)
+        {
+            if (id == null)
+            {
+                return RedirectToAction("Index");
+            }
+            var user = context.Users.Find(id);
+            if (user != null)
+            {
+                foreach(var rol in context.Roles)
+                {
+                    if (await userManager.IsInRoleAsync(user, rol.NormalizedName))
+                    {
+                        //return RedirectToAction("Index", "Contracten");
+                       await userManager.RemoveFromRoleAsync(user, rol.NormalizedName);
+                    }
+                }
+            }
+            return RedirectToAction("Index");
         }
 
         public string GetRolID(string userId)

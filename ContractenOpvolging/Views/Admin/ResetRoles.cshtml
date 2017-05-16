@@ -1,0 +1,16 @@
+@model ContractenOpvolging.Models.ResetRolesViewModel
+
+@{
+    ViewData["Title"] = "ResetRoles";
+}
+
+<h2>Gebruikersrechten</h2>
+
+
+<h4>Rechten resetten voor @Model.Email?</h4>
+<hr />
+<form asp-action="Reset">
+    <input type="submit" value="Reset" class="btn btn-success" style="width:8em"/>
+</form>
+<a asp-action="Index" class="btn btn-default" style="width:8em">Annuleren</a>
+

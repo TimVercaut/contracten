@@ -34,5 +34,7 @@ namespace ContractenOpvolging.Data
 
         public DbSet<ContractenOpvolging.Models.UserViewModel> UserViewModel { get; set; }
 
+        public DbSet<ContractenOpvolging.Models.ResetRolesViewModel> ResetRolesViewModel { get; set; }
+
     }
 }
