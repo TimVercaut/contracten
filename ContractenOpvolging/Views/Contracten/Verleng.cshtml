@@ -49,11 +49,8 @@
     <div class="form-group">
         <label asp-for="NieuweKleur" class="col-md-2 control-label"></label>
         <div class="col-md-10">
-            <select asp-for="NieuweKleur" class="form-control" >
-                <option value="Green" style="background-color:green;color:white">Groen</option>
-                <option value="Yellow" style="background-color:yellow">Geel</option>
-                <option value="Orange" style="background-color:orange">Oranje</option>
-                <option value="Red" style="background-color:red">Rood</option>
+            <select asp-for="NieuweKleur" class="form-control" asp-items="ViewBag.Lijst">
+                <option selected="selected" value="">--Selecteer een nieuwe kleurcode--</option>
             </select>
             <span asp-validation-for="NieuweKleur" class="text-danger"></span>
         </div>
@@ -61,7 +58,7 @@
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
                 <input type="submit" value="Save" class="btn btn-default" />
-                <a asp-action="Index" class="btn btn-default">Cancel</a>
+                <a asp-action="ContractenDetails" class="btn btn-default">Cancel</a>
             </div>
         </div>
 </form>

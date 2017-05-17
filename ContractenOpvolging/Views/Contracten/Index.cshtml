@@ -3,13 +3,14 @@
 
 @{
     ViewData["Title"] = "Index";
-    List<Klant> klantLijst = ViewBag.KlantenLijst; 
+    List<Klant> klantLijst = ViewBag.KlantenLijst;
 }
 
 <h2>Alle contracten</h2>
 
-<div class="container">
-        <a asp-action="Grafisch" class="btn-bracketed">Grafische voorstelling</a>
+<p>
+    <a asp-action="Grafisch" class="btn-bracketed">Grafische voorstelling</a>
+
     @{
         if (User.IsInRole("Admin"))
         {
@@ -17,18 +18,12 @@
 
         }
     }
-    <hr/>
-    <div class="row">
-        <form asp-controller="Contracten" asp-action="KlantZoeken" method="post" class="col-md-4">
-            <input type="text" name="query" value="" class="search-query" placeholder="Geef klantnaam..." />
-            <input type="submit" value="Klant zoeken" class="btn btn-sm" />
-        </form>
-        <form asp-controller="Contracten" asp-action="ConsultantZoeken" method="post" class="col-md-4">
-            <input type="text" name="query" value="" class="search-query" placeholder="Geef familienaam..." />
-            <input type="submit" value="Consultant zoeken" class="btn btn-sm" />
-        </form>
-    </div>
+</p>
+<div class="row">
+    @Html.Partial("_ZoekConsultant")
+    @Html.Partial("_ZoekKlant")
 </div>
+
 <table class="table">
     <thead>
         <tr>
@@ -60,11 +55,11 @@
         @foreach (var item in Model)
         {
             Klant klant;
-            if(item.OnderKlant != null || item.OnderKlant != -1)
+            if (item.OnderKlant != null || item.OnderKlant != -1)
             {
-                 klant = (from k in klantLijst
-                             where k.KlantID == item.OnderKlant
-                             select k).FirstOrDefault();
+                klant = (from k in klantLijst
+                         where k.KlantID == item.OnderKlant
+                         select k).FirstOrDefault();
             }
             else
             {

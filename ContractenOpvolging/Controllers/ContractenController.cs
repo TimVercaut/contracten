@@ -84,8 +84,9 @@ namespace ContractenOpvolging.Controllers
         {
             if (query != null)
             {
+                var target = ZoekTargetPagina();
                 ViewBag.KlantenLijst = await GetKlanten();
-                return View("Index", await GetContractenByName(query));
+                return View(target, await GetContractenByName(query));
             }
             else
             {
@@ -98,6 +99,7 @@ namespace ContractenOpvolging.Controllers
         {
             if (query != null)
             {
+                var target = ZoekTargetPagina();
                 ViewBag.KlantenLijst = await GetKlanten();
                 var model = _context.Contracten
                                     .Where(c => c.Klant.Naam.StartsWith(query))
@@ -105,7 +107,7 @@ namespace ContractenOpvolging.Controllers
                                     .Include(c => c.Consultant)
                                     .Include(c => c.Klant)
                                     .ToListAsync();
-                return View("Index", await model);
+                return View(target, await model);
             }
             else
             {
@@ -216,6 +218,7 @@ namespace ContractenOpvolging.Controllers
 
             return View(contract);
         }
+
         [Authorize(Roles = "Admin")]
         // POST: Contracten/Delete/5
         [HttpPost, ActionName("Delete")]
@@ -232,6 +235,7 @@ namespace ContractenOpvolging.Controllers
         {
             return _context.Contracten.Any(e => e.ContractID == id);
         }
+
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Verleng(int id)
         {
@@ -251,7 +255,8 @@ namespace ContractenOpvolging.Controllers
                 model.EindDatum = contract.EindDatum;
                 model.NieuweEindDatum = contract.EindDatum;
                 model.VerlengKleur = contract.Verlenging;
-                model.NieuweKleur = contract.Verlenging;
+                ViewBag.Lijst = new SelectList(
+                    Enum.GetValues(typeof(Verlenging)).Cast<Verlenging>(), nameof(contract.Verlenging));
                 return View(model);
             }
             else
@@ -259,15 +264,19 @@ namespace ContractenOpvolging.Controllers
                 return RedirectToAction("Index");
             }
         }
+
         [HttpPost, ActionName("Verleng"),Authorize(Roles ="Admin")]
         public async Task<IActionResult> VerlengContract(int id,[Bind("NieuweEindDatum","NieuweKleur")] ContractVerlengingViewModel model)
         {
             var contract = await _context.Contracten.FindAsync(id);
-
             if (contract != null)
             {
+                var kleur = model.NieuweKleur;
                 contract.EindDatum = model.NieuweEindDatum;
-                contract.Verlenging = model.NieuweKleur;
+                if (model.NieuweKleur != null)
+                {
+                    contract.Verlenging = (Verlenging)Enum.Parse(typeof(Verlenging), kleur, true);
+                }
                 _context.SaveChanges();
                 return RedirectToAction("ContractenDetails");
             }
@@ -276,12 +285,22 @@ namespace ContractenOpvolging.Controllers
                 return View("Verleng", model);
             }
         }
+
         [Authorize(Roles ="Admin")]
         public async Task<IActionResult> ContractenDetails()
         {
             ViewBag.KlantenLijst = await GetKlanten();
             var contracten = await GetContractenByName();
             return View(contracten);
+        }
+
+        private string ZoekTargetPagina()
+        {
+            if (User.IsInRole("Admin"))
+            {
+                return "ContractenDetails";
+            }
+            else return "Index";
         }
     }
 }

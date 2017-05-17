@@ -22,8 +22,9 @@ namespace ContractenOpvolging.Models
         [Display(Name = "Nieuwe einddatum")]
         public DateTime NieuweEindDatum { get; set; }
         public Verlenging VerlengKleur { get; set; }
-        public Verlenging NieuweKleur { get; internal set; }
+        public string NieuweKleur { get; set; }
     }
+
     public class MinimumDatumAttribute : RangeAttribute
     {
         public MinimumDatumAttribute()

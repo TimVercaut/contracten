@@ -12,6 +12,11 @@
     <a asp-action="Create" class="btn-bracketed">Nieuw Contract</a>
     <a asp-action="Grafisch" class="btn-bracketed">Grafische voorstelling</a>
 </p>
+<div class="row">
+    @Html.Partial("_ZoekConsultant")
+    @Html.Partial("_ZoekKlant")
+</div>
+
 <table class="table">
     <thead>
         <tr>
