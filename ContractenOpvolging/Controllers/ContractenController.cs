@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using ContractenOpvolging.Data;
 using ContractenOpvolging.Models.ContractenModels;
 using Microsoft.AspNetCore.Authorization;
+using ContractenOpvolging.Models;
 
 namespace ContractenOpvolging.Controllers
 {
@@ -46,6 +47,10 @@ namespace ContractenOpvolging.Controllers
         // GET: Contracten
         public async Task<IActionResult> Index()
         {
+            if (User.IsInRole("Admin"))
+            {
+                RedirectToAction("ContractenDetails");
+            }
             ViewBag.KlantenLijst = await GetKlanten();
             return View(await GetContractenByName());
         }
@@ -100,7 +105,7 @@ namespace ContractenOpvolging.Controllers
                                     .Include(c => c.Consultant)
                                     .Include(c => c.Klant)
                                     .ToListAsync();
-                return View("Index",await model);
+                return View("Index", await model);
             }
             else
             {
@@ -109,6 +114,7 @@ namespace ContractenOpvolging.Controllers
         }
 
         // GET: Contracten/Create
+        [Authorize(Roles = "Admin")]
         public IActionResult Create()
         {
             ViewData["ConsultantID"] = new SelectList(_context.Consultants, "ConsultantID", "Naam");
@@ -120,6 +126,7 @@ namespace ContractenOpvolging.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ContractID,StartDatum,EindDatum,Opzegtermijn,Randvoorwaarden,Tarief,Kosten,Verlenging,KlantID,OnderKlant,ConsultantID")] Contract contract)
         {
@@ -190,6 +197,7 @@ namespace ContractenOpvolging.Controllers
         }
 
         // GET: Contracten/Delete/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -208,7 +216,7 @@ namespace ContractenOpvolging.Controllers
 
             return View(contract);
         }
-
+        [Authorize(Roles = "Admin")]
         // POST: Contracten/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
@@ -223,6 +231,57 @@ namespace ContractenOpvolging.Controllers
         private bool ContractExists(int id)
         {
             return _context.Contracten.Any(e => e.ContractID == id);
+        }
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Verleng(int id)
+        {
+            var model = new ContractVerlengingViewModel();
+            
+            if (ContractExists(id))
+            {
+                var contract = await _context.Contracten
+                                    .Include("Consultant")
+                                    .Include("Klant")
+                                    .Where(ID => ID.ContractID == id)
+                                    .FirstOrDefaultAsync();
+
+                model.Consultant = contract.Consultant.Naam;
+                model.Klant = contract.Klant.Naam;
+                model.ContractID = contract.ContractID;
+                model.EindDatum = contract.EindDatum;
+                model.NieuweEindDatum = contract.EindDatum;
+                model.VerlengKleur = contract.Verlenging;
+                model.NieuweKleur = contract.Verlenging;
+                return View(model);
+            }
+            else
+            {
+                return RedirectToAction("Index");
+            }
+        }
+        [HttpPost, ActionName("Verleng"),Authorize(Roles ="Admin")]
+        public async Task<IActionResult> VerlengContract(int id,[Bind("NieuweEindDatum","NieuweKleur")] ContractVerlengingViewModel model)
+        {
+            var contract = await _context.Contracten.FindAsync(id);
+
+            if (contract != null)
+            {
+                contract.EindDatum = model.NieuweEindDatum;
+                contract.Verlenging = model.NieuweKleur;
+                _context.SaveChanges();
+                return RedirectToAction("ContractenDetails");
+            }
+            else
+            {
+                return View("Verleng", model);
+            }
+        }
+        [Authorize(Roles ="Admin")]
+        public async Task<IActionResult> ContractenDetails()
+        {
+            ViewBag.KlantenLijst = await GetKlanten();
+            var contracten = await GetContractenByName();
+            return View(contracten);
         }
     }
 }

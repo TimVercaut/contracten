@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace ContractenOpvolging.Controllers
 {
-    [Authorize]
+    [Authorize(Roles ="Admin")]
     public class AdminController : Controller
     {
         private readonly UserManager<ApplicationUser> userManager;
@@ -123,11 +123,10 @@ namespace ContractenOpvolging.Controllers
             {
                 foreach(var rol in context.Roles)
                 {
-                    if (await userManager.IsInRoleAsync(user, rol.NormalizedName))
-                    {
+                    //if (await userManager.IsInRoleAsync(user, rol.Id))
+                    //{
                         //return RedirectToAction("Index", "Contracten");
                        await userManager.RemoveFromRoleAsync(user, rol.NormalizedName);
-                    }
                 }
             }
             return RedirectToAction("Index");

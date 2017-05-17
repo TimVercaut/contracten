@@ -1,0 +1,68 @@
+@model ContractenOpvolging.Models.ContractVerlengingViewModel
+
+@{
+    ViewData["Title"] = "Verleng";
+}
+
+<h2>Verleng</h2>
+
+<form asp-action="Verleng">
+    <div class="form-horizontal">
+        <h4>@Html.DisplayFor(model => model.Consultant)</h4>
+        <hr />
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.Consultant)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Consultant)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.Klant)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Klant)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.EindDatum)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.EindDatum)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.VerlengKleur)
+            </dt>
+            <dd style="width:8em;background-color:@Model.VerlengKleur">
+
+            </dd>
+        </dl>
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <input type="hidden" asp-for="ContractID" />
+        </div>
+        <div class="form-group">
+            <label asp-for="NieuweEindDatum" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="NieuweEindDatum" class="form-control" />
+                <span asp-validation-for="NieuweEindDatum" class="text-danger"></span>
+            </div>
+        </div>
+    <div class="form-group">
+        <label asp-for="NieuweKleur" class="col-md-2 control-label"></label>
+        <div class="col-md-10">
+            <select asp-for="NieuweKleur" class="form-control" >
+                <option value="Green" style="background-color:green;color:white">Groen</option>
+                <option value="Yellow" style="background-color:yellow">Geel</option>
+                <option value="Orange" style="background-color:orange">Oranje</option>
+                <option value="Red" style="background-color:red">Rood</option>
+            </select>
+            <span asp-validation-for="NieuweKleur" class="text-danger"></span>
+        </div>
+    </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Save" class="btn btn-default" />
+                <a asp-action="Index" class="btn btn-default">Cancel</a>
+            </div>
+        </div>
+</form>
+

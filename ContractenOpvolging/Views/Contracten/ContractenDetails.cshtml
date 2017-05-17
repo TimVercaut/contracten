@@ -1,34 +1,17 @@
 @using ContractenOpvolging.Models.ContractenModels;
-@model IEnumerable<Contract>
+@model IEnumerable<ContractenOpvolging.Models.ContractenModels.Contract>
 
 @{
-    ViewData["Title"] = "Index";
-    List<Klant> klantLijst = ViewBag.KlantenLijst; 
+    ViewData["Title"] = "ContractenDetails";
+    List<Klant> klantLijst = ViewBag.KlantenLijst;
 }
 
-<h2>Alle contracten</h2>
+<h2>Contracten - Admin</h2>
 
-<div class="container">
-        <a asp-action="Grafisch" class="btn-bracketed">Grafische voorstelling</a>
-    @{
-        if (User.IsInRole("Admin"))
-        {
-            <a asp-action="ContractenDetails" class="btn-bracketed">Contracten - Admin</a>
-
-        }
-    }
-    <hr/>
-    <div class="row">
-        <form asp-controller="Contracten" asp-action="KlantZoeken" method="post" class="col-md-4">
-            <input type="text" name="query" value="" class="search-query" placeholder="Geef klantnaam..." />
-            <input type="submit" value="Klant zoeken" class="btn btn-sm" />
-        </form>
-        <form asp-controller="Contracten" asp-action="ConsultantZoeken" method="post" class="col-md-4">
-            <input type="text" name="query" value="" class="search-query" placeholder="Geef familienaam..." />
-            <input type="submit" value="Consultant zoeken" class="btn btn-sm" />
-        </form>
-    </div>
-</div>
+<p>
+    <a asp-action="Create" class="btn-bracketed">Nieuw Contract</a>
+    <a asp-action="Grafisch" class="btn-bracketed">Grafische voorstelling</a>
+</p>
 <table class="table">
     <thead>
         <tr>
@@ -53,6 +36,16 @@
             <th>
                 @Html.DisplayNameFor(model => model.Randvoorwaarden)
             </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Tarief)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Kosten)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Verlenging)
+            </th>
+
             <th></th>
         </tr>
     </thead>
@@ -62,9 +55,10 @@
             Klant klant;
             if(item.OnderKlant != null || item.OnderKlant != -1)
             {
-                 klant = (from k in klantLijst
-                             where k.KlantID == item.OnderKlant
-                             select k).FirstOrDefault();
+                klant = (from k in klantLijst
+                         where k.KlantID == item.OnderKlant
+                         select k).FirstOrDefault();
+
             }
             else
             {
@@ -91,6 +85,18 @@
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Randvoorwaarden)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Tarief)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Kosten)
+                </td>
+                <td style="background-color:@item.Verlenging">
+                </td>
+                <td>
+                    <a asp-action="Verleng" asp-route-id="@item.ContractID">Aanpassen</a> |
+                    <a asp-action="Delete" asp-route-id="@item.ContractID">X</a>
                 </td>
             </tr>
         }

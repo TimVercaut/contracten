@@ -46,6 +46,7 @@ namespace ContractenOpvolging.Controllers
         }
 
         // GET: Klanten/Create
+        [Authorize(Roles = "Admin")]
         public IActionResult Create()
         {
             return View();
@@ -56,6 +57,7 @@ namespace ContractenOpvolging.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Create([Bind("KlantID,Naam,Contactpersoon,Telefoon,Email,Straat,Huisnummer,Postcode,Gemeente")] Klant klant)
         {
             if (ModelState.IsValid)
@@ -68,6 +70,7 @@ namespace ContractenOpvolging.Controllers
         }
 
         // GET: Klanten/Edit/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -88,6 +91,7 @@ namespace ContractenOpvolging.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int id, [Bind("KlantID,Naam,Contactpersoon,Telefoon,Email,Straat,Huisnummer,Postcode,Gemeente")] Klant klant)
         {
             if (id != klant.KlantID)
@@ -119,6 +123,7 @@ namespace ContractenOpvolging.Controllers
         }
 
         // GET: Klanten/Delete/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -139,6 +144,7 @@ namespace ContractenOpvolging.Controllers
         // POST: Klanten/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var klant = await _context.Klanten.SingleOrDefaultAsync(m => m.KlantID == id);

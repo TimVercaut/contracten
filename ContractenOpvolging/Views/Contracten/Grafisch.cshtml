@@ -13,7 +13,15 @@
 <h2>Grafisch overzicht</h2>
 <div class="container">
     <div class="row">
-        <a asp-action="Index" class="col-md-2">Naar overzicht</a>
+        @if (User.IsInRole("Admin"))
+        {
+            <a asp-action="ContractenDetails" class="col-md-2">Naar overzicht</a>
+        }
+        else
+        {
+            <a asp-action="Index" class="col-md-2">Naar overzicht</a>
+        }
+
         <div class="col-md-3">
             <form asp-controller="Contracten" asp-action="MaandenAanpassen" method="post">
                     <input type="text" name="query" value="" class="search-query" placeholder="Geef aantal maanden" />
