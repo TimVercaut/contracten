@@ -63,7 +63,6 @@
                 klant = (from k in klantLijst
                          where k.KlantID == item.OnderKlant
                          select k).FirstOrDefault();
-
             }
             else
             {

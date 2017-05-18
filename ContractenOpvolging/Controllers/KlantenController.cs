@@ -1,9 +1,6 @@
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ContractenOpvolging.Data;
 using ContractenOpvolging.Models.ContractenModels;
@@ -24,6 +21,7 @@ namespace ContractenOpvolging.Controllers
         // GET: Klanten
         public async Task<IActionResult> Index()
         {
+            ViewBag.TargetController = "Klanten";
             return View(await _context.Klanten.ToListAsync());
         }
 
@@ -156,6 +154,24 @@ namespace ContractenOpvolging.Controllers
         private bool KlantExists(int id)
         {
             return _context.Klanten.Any(e => e.KlantID == id);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> KlantZoeken(string query)
+        {
+            if (query != null)
+            {
+                var model = await _context.Klanten
+                                          .Where(k => k.Naam.ToLower().StartsWith(query.ToLower()))
+                                          .OrderBy(n => n.Naam)
+                                          .ToListAsync();
+
+                return View("Index", model);
+            }
+            else
+            {
+                return RedirectToAction("Index");
+            }
         }
     }
 }

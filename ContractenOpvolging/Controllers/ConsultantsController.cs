@@ -1,9 +1,6 @@
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ContractenOpvolging.Data;
 using ContractenOpvolging.Models.ContractenModels;
@@ -150,6 +147,24 @@ namespace ContractenOpvolging.Controllers
             _context.Consultants.Remove(consultant);
             await _context.SaveChangesAsync();
             return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ConsultantZoeken(string query)
+        {
+            if (query != null)
+            {
+                var model = await _context.Consultants
+                                          .Where(c => c.Familienaam.StartsWith(query))
+                                          .OrderBy(c => c.Familienaam)
+                                          .ToListAsync();
+
+                return View("Index", model);
+            }
+            else
+            {
+                return RedirectToAction("Index");
+            }
         }
 
         private bool ConsultantExists(int id)

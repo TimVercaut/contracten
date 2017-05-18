@@ -80,7 +80,7 @@ namespace ContractenOpvolging.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> ConsultantZoeken(string query)
+        public async Task<IActionResult> ConsultantZoeken(string query, string controller = "Contracten")
         {
             if (query != null)
             {
@@ -90,7 +90,7 @@ namespace ContractenOpvolging.Controllers
             }
             else
             {
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", controller);
             }
         }
 
@@ -124,9 +124,6 @@ namespace ContractenOpvolging.Controllers
             return View();
         }
 
-        // POST: Contracten/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
