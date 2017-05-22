@@ -1,0 +1,17 @@
+@model ContractenOpvolging.Models.ContractenModels.Contract
+
+@{
+    ViewData["Title"] = "Archive";
+}
+
+<h2>Bevestig archivatie</h2>
+
+
+<div class="alert">
+    Contract van @Model.Consultant.Naam bij @Model.Klant.Naam archiveren?
+</div>
+<div class="row">
+    <a asp-action="ConfirmArchive" asp-route-id="@Model.ContractID" class="btn btn-success">Archiveren</a>
+    <a asp-action="ContractDetails" class="btn btn-default">Annlueren</a>
+</div>
+

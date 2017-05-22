@@ -15,6 +15,7 @@ namespace ContractenOpvolging.Data
         public DbSet<Klant> Klanten { get; set; }
         public DbSet<Contract> Contracten { get; set; }
         public DbSet<Consultant> Consultants { get; set; }
+        public DbSet<ContractArchief> ContractenArchief { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

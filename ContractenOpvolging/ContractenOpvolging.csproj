@@ -11,13 +11,6 @@
   <PropertyGroup>
     <UserSecretsId>aspnet-ContractenOpvolging-6a11007d-106c-4b14-afd0-98de869378b6</UserSecretsId>
   </PropertyGroup>
-
-  <ItemGroup>
-    <Compile Remove="wwwroot\lib\angular\**" />
-    <Content Remove="wwwroot\lib\angular\**" />
-    <EmbeddedResource Remove="wwwroot\lib\angular\**" />
-    <None Remove="wwwroot\lib\angular\**" />
-  </ItemGroup>
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="6.0.2" />
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.0.0" />

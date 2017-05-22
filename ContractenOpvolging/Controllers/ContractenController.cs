@@ -258,7 +258,7 @@ namespace ContractenOpvolging.Controllers
         public async Task<IActionResult> Verleng(int id)
         {
             var model = new ContractVerlengingViewModel();
-            
+
             if (ContractExists(id))
             {
                 var contract = await _context.Contracten
@@ -283,8 +283,8 @@ namespace ContractenOpvolging.Controllers
             }
         }
 
-        [HttpPost, ActionName("Verleng"),Authorize(Roles ="Admin")]
-        public async Task<IActionResult> VerlengContract(int id,[Bind("NieuweEindDatum","NieuweKleur")] ContractVerlengingViewModel model)
+        [HttpPost, ActionName("Verleng"), Authorize(Roles = "Admin")]
+        public async Task<IActionResult> VerlengContract(int id, [Bind("NieuweEindDatum", "NieuweKleur")] ContractVerlengingViewModel model)
         {
             var contract = await _context.Contracten.FindAsync(id);
             if (contract != null)
@@ -304,7 +304,7 @@ namespace ContractenOpvolging.Controllers
             }
         }
 
-        [Authorize(Roles ="Admin")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> ContractenDetails()
         {
             ViewBag.KlantenLijst = await GetKlanten();
@@ -319,6 +319,62 @@ namespace ContractenOpvolging.Controllers
                 return "ContractenDetails";
             }
             else return "Index";
+        }
+
+        public IActionResult Archive(int id)
+        {
+            var contract = _context.Contracten
+                                   .Include("Consultant")
+                                   .Include("Klant")
+                                   .Where(c => c.ContractID == id)
+                                   .FirstOrDefault();
+            if (contract != null)
+            {
+                return View(contract);
+            }
+            return RedirectToAction("ContractenDetails");
+        }
+
+        [Authorize(Roles = "Admin")]
+        public IActionResult ConfirmArchive(int id)
+        {
+            var contract = _context.Contracten.Find(id);
+            if (contract != null)
+            {
+                //zoek het juiste contractarchief (per jaar)
+                ContractArchief nieuwArchief;
+                var thisYear = DateTime.Now.Year.ToString();
+                var jaarArchief = (from archief in _context.ContractenArchief
+                                   where archief.Jaar == thisYear
+                                   select archief).FirstOrDefault();
+                //maak een nieuw archief als er nog geen bestaat
+                if (jaarArchief == null)
+                {
+                    nieuwArchief = NewContractsArchive();
+                }
+                else
+                {
+                    nieuwArchief = jaarArchief;
+                }
+                //voeg het contract toe aan het archief
+                nieuwArchief.OudeContracten.Add(contract);
+                _context.ContractenArchief.Add(nieuwArchief);
+                //verwijder het contract uit de huidige lijst.
+                _context.Contracten.Remove(contract);
+                _context.SaveChanges();
+            }
+            return RedirectToAction("Error");
+        }
+
+        private ContractArchief NewContractsArchive()
+        {
+            var thisYear = DateTime.Now.Year.ToString();
+            return new ContractArchief
+            {
+                Jaar = thisYear,
+                Naam = string.Format("Archief" + "-" + thisYear),
+                OudeContracten = new List<Contract>()
+            };
         }
     }
 }

@@ -100,7 +100,8 @@
                 </td>
                 <td>
                     <a asp-action="Verleng" asp-route-id="@item.ContractID">Aanpassen</a> |
-                    <a asp-action="Delete" asp-route-id="@item.ContractID">X</a>
+                    <a asp-action="Delete" asp-route-id="@item.ContractID">X</a> |
+                    <a asp-action="Archive" asp-route-id="@item.ContractID">Archiveren</a>
                 </td>
             </tr>
         }

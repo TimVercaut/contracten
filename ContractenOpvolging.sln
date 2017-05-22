@@ -1,9 +1,16 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26403.7
+VisualStudioVersion = 15.0.26430.6
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ContractenOpvolging", "ContractenOpvolging\ContractenOpvolging.csproj", "{709C3F05-45E3-424E-B450-EEE2709D97F2}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{BEAA515D-7469-4F43-BB45-4C636FC7C685}"
+	ProjectSection(SolutionItems) = preProject
+		ContractenOpvolging\bs-config.json = ContractenOpvolging\bs-config.json
+		ContractenOpvolging\package.json = ContractenOpvolging\package.json
+		ContractenOpvolging\tslint.json = ContractenOpvolging\tslint.json
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

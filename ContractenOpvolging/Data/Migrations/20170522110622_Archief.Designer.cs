@@ -9,9 +9,10 @@ using ContractenOpvolging.Models.ContractenModels;
 namespace ContractenOpvolging.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20170522110622_Archief")]
+    partial class Archief
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.1")
@@ -172,8 +173,6 @@ namespace ContractenOpvolging.Data.Migrations
                         .ValueGeneratedOnAdd();
 
                     b.Property<string>("Jaar");
-
-                    b.Property<string>("Naam");
 
                     b.HasKey("Id");
 
