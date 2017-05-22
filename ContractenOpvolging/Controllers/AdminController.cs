@@ -7,10 +7,11 @@ using ContractenOpvolging.Data;
 using ContractenOpvolging.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 
 namespace ContractenOpvolging.Controllers
 {
-    [Authorize(Roles ="Admin")]
+    [Authorize(Roles = "Admin")]
     public class AdminController : Controller
     {
         private readonly UserManager<ApplicationUser> userManager;
@@ -28,7 +29,7 @@ namespace ContractenOpvolging.Controllers
         public IActionResult Index()
         {
             var model = new List<UserListViewModel>();
-            foreach (var user in context.Users)
+            foreach (var user in context.Users.OrderBy(u => u.Email))
             {
                 model.Add(new UserListViewModel
                 {
@@ -96,47 +97,42 @@ namespace ContractenOpvolging.Controllers
         public IActionResult ResetRoles(string id)
         {
             var user = context.Users.Find(id);
-            if (user != null) {
+            if (user != null)
+            {
                 var model = new ResetRolesViewModel
                 {
                     Id = user.Id,
                     Email = user.Email
                 };
-            return View(model);
+                return View(model);
             }
             else
             {
                 return RedirectToAction("Index");
             }
-            
+
         }
 
         [HttpPost]
         public async Task<IActionResult> Reset(string id)
         {
-            if (id == null)
+            var geb = User.Identity.Name;
+            if (id != null)
             {
-                return RedirectToAction("Index");
-            }
-            var user = context.Users.Find(id);
-            if (user != null)
-            {
-                foreach(var rol in context.Roles)
-                {
-                    //if (await userManager.IsInRoleAsync(user, rol.Id))
-                    //{
-                        //return RedirectToAction("Index", "Contracten");
-                       await userManager.RemoveFromRoleAsync(user, rol.NormalizedName);
-                }
-            }
+                var user = await userManager.FindByIdAsync(id);
+                var admin = "Admin"; //Hardcoded -- toDo: sql error workaround?
+                var User = "User";
+                await userManager.RemoveFromRoleAsync(user,admin);
+                await userManager.RemoveFromRoleAsync(user, User);
+            }            
             return RedirectToAction("Index");
         }
 
         public string GetRolID(string userId)
         {
             return (from userRole in context.UserRoles
-                         where userRole.RoleId == userId
-                         select userRole.RoleId).FirstOrDefault();
+                    where userRole.RoleId == userId
+                    select userRole.RoleId).FirstOrDefault();
         }
 
 
@@ -146,7 +142,21 @@ namespace ContractenOpvolging.Controllers
                     join user in context.UserRoles on role.Id equals user.RoleId
                     where user.UserId == userId
                     select role.NormalizedName).FirstOrDefault();
-                     
+
+        }
+
+        public IActionResult OudeContracten()
+        {
+            var model = new List<OudeContractenListViewModel>();
+            //foreach(var oudContract in context.Oudecontracten.OrderBy(c => c.Consultant.Familienaam))
+            //{
+            //    model.Add(new OudeContractenListViewModel
+            //    {
+            //        Consultant = oudContract.Consultant.Naam,
+            //        ArchiefContracten = oudContract.OudeContracten.ToList()
+            //    });
+            //}
+            return View(model);
         }
     }
 }

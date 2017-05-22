@@ -28,9 +28,17 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.Email)
                 </td>
+                @if (item.RoleName != null)
+                {
                 <td>
                     @Html.DisplayFor(modelItem => item.RoleName)
                 </td>
+                }
+                else
+                {
+                    <td>Inactief: heeft geen toegang. </td>
+
+                }
                 <td>
                     <a asp-action="AddRole" asp-route-id="@item.Id">Rol aanpassen</a> |
                     <a asp-action="ResetRoles" asp-route-id="@item.Id">Reset permissies</a>

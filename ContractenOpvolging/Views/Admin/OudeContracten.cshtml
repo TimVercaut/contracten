@@ -1,0 +1,78 @@
+@using ContractenOpvolging.Models;
+@model  IEnumerable<OudeContractenListViewModel>
+@{
+    ViewData["Title"] = "OudeContracten";
+    var ContractLijst = new List<ContractenOpvolging.Models.ContractenModels.Contract>();
+}
+
+<h2>Archief - Afgeronde contracten</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Consultant)
+            </th>
+            <th>
+                Klant
+            </th>
+            <th>
+                Subklant
+            </th>
+            <th>
+                Startdatum
+            </th>
+            <th>
+                Einddatum
+            </th>
+            <th>
+                Tarief
+            </th>
+            <th>
+                Kost
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(model => item.Consultant)
+                </td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                </tr>
+                @foreach (var contract in item.ArchiefContracten)
+                {
+                <tr>
+                    <td></td>
+                    <td>
+                        @Html.DisplayFor(model => contract.Klant)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => contract.OnderKlant)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => contract.StartDatum)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => contract.EindDatum)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => contract.Tarief)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => contract.Kosten)
+                    </td>
+                </tr>
+                }
+        }
+    </tbody>
+</table>
+

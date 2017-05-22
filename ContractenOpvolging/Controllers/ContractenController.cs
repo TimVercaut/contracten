@@ -131,13 +131,34 @@ namespace ContractenOpvolging.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(contract);
-                await _context.SaveChangesAsync();
-                return RedirectToAction("Index");
+                if (!ConsultantHasContract(contract.ConsultantID))
+                {
+                    _context.Add(contract);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    return RedirectToAction("HasContract", contract.ConsultantID);
+                }
             }
             ViewData["ConsultantID"] = new SelectList(_context.Consultants, "ConsultantID", "Familienaam", contract.ConsultantID);
             ViewData["KlantID"] = new SelectList(_context.Klanten, "KlantID", "Naam", contract.KlantID);
             return View(contract);
+        }
+
+        public IActionResult HasContract(int id)
+        {
+
+            return View();
+        }
+
+        private bool ConsultantHasContract(int id)
+        {
+            var contract = from con in _context.Contracten
+                           where con.ConsultantID == id
+                           select con;
+            return (contract != null);
         }
 
         // GET: Contracten/Edit/5

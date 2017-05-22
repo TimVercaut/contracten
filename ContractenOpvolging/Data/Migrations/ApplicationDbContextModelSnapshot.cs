@@ -4,7 +4,6 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using ContractenOpvolging.Data;
-using ContractenOpvolging.Models.ContractenModels;
 
 namespace ContractenOpvolging.Data.Migrations
 {
@@ -189,6 +188,30 @@ namespace ContractenOpvolging.Data.Migrations
                     b.ToTable("Klanten");
                 });
 
+            modelBuilder.Entity("ContractenOpvolging.Models.ContractenModels.OudeContracten", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<DateTime>("BeginDatum");
+
+                    b.Property<string>("Consultant");
+
+                    b.Property<DateTime>("EindDatum");
+
+                    b.Property<string>("Klant");
+
+                    b.Property<decimal?>("Kosten");
+
+                    b.Property<string>("Subklant");
+
+                    b.Property<decimal?>("Tarief");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Oudecontracten");
+                });
+
             modelBuilder.Entity("ContractenOpvolging.Models.ContractVerlengingViewModel", b =>
                 {
                     b.Property<int>("ContractID")
@@ -201,6 +224,10 @@ namespace ContractenOpvolging.Data.Migrations
                     b.Property<string>("Klant");
 
                     b.Property<DateTime>("NieuweEindDatum");
+
+                    b.Property<string>("NieuweKleur");
+
+                    b.Property<int>("VerlengKleur");
 
                     b.HasKey("ContractID");
 
