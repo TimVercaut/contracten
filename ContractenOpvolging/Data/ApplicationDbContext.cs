@@ -15,25 +15,18 @@ namespace ContractenOpvolging.Data
         public DbSet<Klant> Klanten { get; set; }
         public DbSet<Contract> Contracten { get; set; }
         public DbSet<Consultant> Consultants { get; set; }
-        public DbSet<ContractArchief> ContractenArchief { get; set; }
+        public DbSet<OudContract> OudeContracten { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
-            // Customize the ASP.NET Identity model and override the defaults if needed.
-            // For example, you can rename the ASP.NET Identity table names and more.
-            // Add your customizations after calling base.OnModelCreating(builder);
         }
 
-        public DbSet<ContractenOpvolging.Models.UserListViewModel> UserListViewModel { get; set; }
-
-        public DbSet<ContractenOpvolging.Models.ApplicationRoleListViewModel> ApplicationRoleListViewModel { get; set; }
-
-        public DbSet<ContractenOpvolging.Models.UserViewModel> UserViewModel { get; set; }
-
-        public DbSet<ContractenOpvolging.Models.ResetRolesViewModel> ResetRolesViewModel { get; set; }
-
-        public DbSet<ContractenOpvolging.Models.ContractVerlengingViewModel> ContractVerlengingViewModel { get; set; }
+        public DbSet<UserListViewModel> UserListViewModel { get; set; }
+        public DbSet<ApplicationRoleListViewModel> ApplicationRoleListViewModel { get; set; }
+        public DbSet<UserViewModel> UserViewModel { get; set; }
+        public DbSet<ResetRolesViewModel> ResetRolesViewModel { get; set; }
+        public DbSet<ContractVerlengingViewModel> ContractVerlengingViewModel { get; set; }
 
     }
 }

@@ -10,7 +10,7 @@ namespace ContractenOpvolging.Models
 {
     public class OudeContractenListViewModel
     {
-        public string Consultant { get; set; }
-        public List<Contract> ArchiefContracten { get; set; }
+        public string Jaar { get; set; }
+        public Contract ArchiefContract { get; set; }
     }
 }

@@ -1,35 +1,38 @@
 @using ContractenOpvolging.Models;
-@model  IEnumerable<OudeContractenListViewModel>
+@using ContractenOpvolging.Models.ContractenModels;
+@model  IEnumerable<OudContract>
 @{
     ViewData["Title"] = "OudeContracten";
-    var ContractLijst = new List<ContractenOpvolging.Models.ContractenModels.Contract>();
-}
 
+}
 <h2>Archief - Afgeronde contracten</h2>
 
 <table class="table">
     <thead>
         <tr>
             <th>
+                @Html.DisplayNameFor(model => model.Jaar)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Klant)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Subklant)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.Consultant)
             </th>
             <th>
-                Klant
+                @Html.DisplayNameFor(model => model.Tarief)
             </th>
             <th>
-                Subklant
+                @Html.DisplayNameFor(model => model.Kost)
             </th>
             <th>
-                Startdatum
+                @Html.DisplayNameFor(model => model.StartDatum)
             </th>
             <th>
-                Einddatum
-            </th>
-            <th>
-                Tarief
-            </th>
-            <th>
-                Kost
+                @Html.DisplayNameFor(model => model.EindDatum)
             </th>
             <th></th>
         </tr>
@@ -37,41 +40,33 @@
     <tbody>
         @foreach (var item in Model)
         {
+
             <tr>
+                <td>
+                    @Html.DisplayFor(model => item.Jaar)
+                </td>
+                <td>
+                    @Html.DisplayFor(model => item.Klant)
+                </td>
+                <td>
+                    @Html.DisplayFor(model => item.Subklant)
+                </td>
                 <td>
                     @Html.DisplayFor(model => item.Consultant)
                 </td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                </tr>
-                @foreach (var contract in item.ArchiefContracten)
-                {
-                <tr>
-                    <td></td>
-                    <td>
-                        @Html.DisplayFor(model => contract.Klant)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(model => contract.OnderKlant)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(model => contract.StartDatum)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(model => contract.EindDatum)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(model => contract.Tarief)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(model => contract.Kosten)
-                    </td>
-                </tr>
-                }
+                <td>
+                    @Html.DisplayFor(model => item.Tarief)
+                </td>
+                <td>
+                    @Html.DisplayFor(model => item.Kost)
+                </td>
+                <td>
+                    @Html.DisplayFor(model => item.StartDatum)
+                </td>
+                <td>
+                    @Html.DisplayFor(model => item.EindDatum)
+                </td>
+            </tr>
         }
     </tbody>
 </table>

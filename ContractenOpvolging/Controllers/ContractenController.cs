@@ -22,11 +22,22 @@ namespace ContractenOpvolging.Controllers
             _context = context;
         }
 
+        private IQueryable<Contract> GetContractenBase(string query = "")
+        {
+            return  _context.Contracten.Include(c => c.Consultant)
+                                       .Include(c => c.Klant);
+        }
+
         private async Task<List<Contract>> GetContractenByDate()
         {
-            return await _context.Contracten.OrderBy(c => c.EindDatum)
-                                            .Include(c => c.Consultant)
-                                            .Include(c => c.Klant)
+
+            return await GetContractenBase().OrderBy(c => c.EindDatum)
+                                            .ToListAsync();
+        }
+
+        private async Task<List<Contract>> GetContractenByDateDesc()
+        {
+            return await GetContractenBase().OrderByDescending(c => c.EindDatum)
                                             .ToListAsync();
         }
 
@@ -35,12 +46,17 @@ namespace ContractenOpvolging.Controllers
             return await _context.Klanten.ToListAsync();
         }
 
+        private async Task<List<Contract>> GetContractenByNameDesc()
+        {
+            return await GetContractenBase().OrderByDescending(c => c.Consultant.Familienaam)
+                                            .ToListAsync();
+        }
+
         public async Task<List<Contract>> GetContractenByName(string query = "")
         {
-            return await _context.Contracten.Where(c => c.Consultant.Familienaam.StartsWith(query))
+
+            return await GetContractenBase().Where(c => c.Consultant.Familienaam.StartsWith(query))
                                             .OrderBy(c => c.Consultant.Familienaam)
-                                            .Include(c => c.Consultant)
-                                            .Include(c => c.Klant)
                                             .ToListAsync();
         }
 
@@ -131,7 +147,7 @@ namespace ContractenOpvolging.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (!ConsultantHasContract(contract.ConsultantID))
+                if (ConsultantHasContract(contract.ConsultantID))
                 {
                     _context.Add(contract);
                     await _context.SaveChangesAsync();
@@ -155,10 +171,10 @@ namespace ContractenOpvolging.Controllers
 
         private bool ConsultantHasContract(int id)
         {
-            var contract = from con in _context.Contracten
+            var contract = (from con in _context.Contracten
                            where con.ConsultantID == id
-                           select con;
-            return (contract != null);
+                           select con).FirstOrDefault();
+            return (contract == null);
         }
 
         // GET: Contracten/Edit/5
@@ -229,6 +245,7 @@ namespace ContractenOpvolging.Controllers
                 .Include(c => c.Consultant)
                 .Include(c => c.Klant)
                 .SingleOrDefaultAsync(m => m.ContractID == id);
+
             if (contract == null)
             {
                 return NotFound();
@@ -305,11 +322,46 @@ namespace ContractenOpvolging.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> ContractenDetails()
+        public async Task<IActionResult> ContractenDetails(string id)
         {
+            //viewbags voor filters en voor de business partner
             ViewBag.KlantenLijst = await GetKlanten();
-            var contracten = await GetContractenByName();
+            ViewBag.NameSortPar = string.IsNullOrEmpty(id) ? "name_desc" : "";
+            ViewBag.DateSortPar = id == "date" ? "date_desc" : "date";
+            List<Contract> contracten;
+            if (id == null)
+            {
+                 contracten = await GetContractenByName();
+            }
+            else
+            {
+                 contracten = await SorteerDeLijstAsync(id);
+            }
             return View(contracten);
+        }
+
+        private async Task<List<Contract>> SorteerDeLijstAsync(string sortId)
+        {
+            List<Contract> contracten;
+            switch (sortId)
+            {
+                case "name_desc":
+                    contracten = await GetContractenByNameDesc();
+                    break;
+
+                case "date":
+                    contracten = await GetContractenByDate();
+                    break;
+
+                case "date_desc":
+                    contracten = await GetContractenByDateDesc();
+                    break;
+
+                default:
+                    contracten = await GetContractenByName();
+                    break;
+            }
+            return contracten;
         }
 
         private string ZoekTargetPagina()
@@ -336,45 +388,49 @@ namespace ContractenOpvolging.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        public IActionResult ConfirmArchive(int id)
+        public IActionResult ConfirmArchive(int? id)
         {
-            var contract = _context.Contracten.Find(id);
-            if (contract != null)
+            if (id != null)
             {
-                //zoek het juiste contractarchief (per jaar)
-                ContractArchief nieuwArchief;
-                var thisYear = DateTime.Now.Year.ToString();
-                var jaarArchief = (from archief in _context.ContractenArchief
-                                   where archief.Jaar == thisYear
-                                   select archief).FirstOrDefault();
-                //maak een nieuw archief als er nog geen bestaat
-                if (jaarArchief == null)
+                var contract = _context.Contracten
+                                       .Include("Klant")
+                                       .Include("Consultant")
+                                       .Where(i => i.ContractID == id).FirstOrDefault();
+                if (contract != null)
                 {
-                    nieuwArchief = NewContractsArchive();
-                }
-                else
-                {
-                    nieuwArchief = jaarArchief;
-                }
-                //voeg het contract toe aan het archief
-                nieuwArchief.OudeContracten.Add(contract);
-                _context.ContractenArchief.Add(nieuwArchief);
-                //verwijder het contract uit de huidige lijst.
-                _context.Contracten.Remove(contract);
-                _context.SaveChanges();
-            }
-            return RedirectToAction("Error");
-        }
+                    var thisYear = DateTime.Now.Year.ToString();
+                    //voeg het contract toe aan het archief
+                    var oudContract = new OudContract();
 
-        private ContractArchief NewContractsArchive()
-        {
-            var thisYear = DateTime.Now.Year.ToString();
-            return new ContractArchief
-            {
-                Jaar = thisYear,
-                Naam = string.Format("Archief" + "-" + thisYear),
-                OudeContracten = new List<Contract>()
-            };
+                    oudContract.Jaar = thisYear;
+                    oudContract.Consultant = contract.Consultant.Naam.ToString();
+                    oudContract.Klant = contract.Klant.Naam;
+                    if (contract.OnderKlant != null)
+                    {
+                        oudContract.Subklant = _context.Klanten.Find(contract.OnderKlant).Naam;
+                    }
+                    else
+                    {
+                        oudContract.Subklant = null;
+                    }
+                    oudContract.StartDatum = contract.StartDatum;
+                    oudContract.EindDatum = contract.EindDatum;
+                    oudContract.Tarief = contract.Tarief;
+                    oudContract.Kost = contract.Kosten;
+                    try
+                    {
+                        //probeer het op te slaan en te verwijderen uit de actieve db
+                        _context.OudeContracten.Add(oudContract);
+                        _context.Contracten.Remove(contract);
+                        _context.SaveChanges();
+                    }
+                    catch (Exception)
+                    {
+                        return RedirectToAction("Error");
+                    }
+                }
+            }
+            return RedirectToAction("OudeContracten","Admin");
         }
     }
 }

@@ -8,6 +8,7 @@ using ContractenOpvolging.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using ContractenOpvolging.Models.ContractenModels;
 
 namespace ContractenOpvolging.Controllers
 {
@@ -145,17 +146,27 @@ namespace ContractenOpvolging.Controllers
 
         }
 
+        public List<Klant> GetKlanten()
+        {
+            return context.Klanten
+                          .OrderBy(k => k.Naam)
+                          .ToList();
+        }
+
+        public List<Consultant> GetConsultants()
+        {
+            return context.Consultants
+                          .OrderBy(c => c.Familienaam)
+                          .ToList();
+        }
+
         public IActionResult OudeContracten()
         {
-            var model = new List<OudeContractenListViewModel>();
-            //foreach(var oudContract in context.Oudecontracten.OrderBy(c => c.Consultant.Familienaam))
-            //{
-            //    model.Add(new OudeContractenListViewModel
-            //    {
-            //        Consultant = oudContract.Consultant.Naam,
-            //        ArchiefContracten = oudContract.OudeContracten.ToList()
-            //    });
-            //}
+            var model = new List<OudContract>();
+            model = context.OudeContracten
+                           .OrderBy(d => d.EindDatum)
+                           .ToList();
+
             return View(model);
         }
     }

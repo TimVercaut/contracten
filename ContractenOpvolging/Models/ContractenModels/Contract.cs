@@ -31,7 +31,7 @@ namespace ContractenOpvolging.Models.ContractenModels
         [Required]
         [DisplayName("Klant")]
         public int KlantID { get; set; }
-        [DisplayName("Subklant")]
+        [DisplayName("Business partner")]
         public int? OnderKlant { get; set; }
         public virtual Consultant Consultant { get; set; }
         [Required]

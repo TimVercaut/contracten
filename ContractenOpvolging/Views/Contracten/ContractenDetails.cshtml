@@ -1,8 +1,10 @@
 @using ContractenOpvolging.Models.ContractenModels;
-@model IEnumerable<ContractenOpvolging.Models.ContractenModels.Contract>
+@model IEnumerable<Contract>
 
 @{
     ViewData["Title"] = "ContractenDetails";
+    string NameSortPar = ViewBag.NameSortPar;
+    string DateSortPar = ViewBag.DateSortPar;
     List<Klant> klantLijst = ViewBag.KlantenLijst;
 }
 
@@ -16,94 +18,93 @@
     @Html.Partial("_ZoekConsultant")
     @Html.Partial("_ZoekKlant")
 </div>
-
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Consultant)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Klant)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.OnderKlant)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.StartDatum)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.EindDatum)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Opzegtermijn)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Randvoorwaarden)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Tarief)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Kosten)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Verlenging)
-            </th>
-
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            Klant klant;
-            if(item.OnderKlant != null || item.OnderKlant != -1)
-            {
-                klant = (from k in klantLijst
-                         where k.KlantID == item.OnderKlant
-                         select k).FirstOrDefault();
-            }
-            else
-            {
-                klant = null;
-            }
+<div class="table-responsive">
+    <table class="table-striped table-bordered">
+        <thead>
             <tr>
-                <td>
-                    <a asp-controller="Consultants" asp-action="Details" asp-route-id="@item.ConsultantID">@Html.DisplayFor(modelItem => item.Consultant.Naam)</a>
-                </td>
-                <td>
-                    <a asp-controller="Klanten" asp-action="Details" asp-route-id="@item.KlantID">@Html.DisplayFor(modelItem => item.Klant.Naam)</a>
-                </td>
-                <td>
-                    <a asp-controller="Klanten" asp-action="Details" asp-route-id="@item.OnderKlant">@Html.DisplayFor(modelItem => klant.Naam)</a>
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.StartDatum)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.EindDatum)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Opzegtermijn)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Randvoorwaarden)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Tarief)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Kosten)
-                </td>
-                <td style="background-color:@item.Verlenging">
-                </td>
-                <td>
-                    <a asp-action="Verleng" asp-route-id="@item.ContractID">Aanpassen</a> |
-                    <a asp-action="Delete" asp-route-id="@item.ContractID">X</a> |
-                    <a asp-action="Archive" asp-route-id="@item.ContractID">Archiveren</a>
-                </td>
+                <th>
+                    <a asp-action="ContractenDetails" asp-route-id="@NameSortPar">@Html.DisplayNameFor(model => model.Consultant) </a>
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Klant) 
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.OnderKlant) 
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.StartDatum) 
+                </th>
+                <th>
+                    <a asp-action="ContractenDetails" asp-route-id="@DateSortPar">@Html.DisplayNameFor(model => model.EindDatum) </a>
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Opzegtermijn) 
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Randvoorwaarden) 
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Tarief) 
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Kosten) 
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Verlenging) 
+                </th>
+                <th></th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                Klant klant;
+                if (item.OnderKlant != null || item.OnderKlant != -1)
+                {
+                    klant = (from k in klantLijst
+                             where k.KlantID == item.OnderKlant
+                             select k).FirstOrDefault();
+                }
+                else
+                {
+                    klant = null;
+                }
+                <tr>
+                    <td>
+                        <a asp-controller="Consultants" asp-action="Details" asp-route-id="@item.ConsultantID">@Html.DisplayFor(modelItem => item.Consultant.Naam)</a>
+                    </td>
+                    <td>
+                        <a asp-controller="Klanten" asp-action="Details" asp-route-id="@item.KlantID">@Html.DisplayFor(modelItem => item.Klant.Naam)</a>
+                    </td>
+                    <td>
+                        <a asp-controller="Klanten" asp-action="Details" asp-route-id="@item.OnderKlant">@Html.DisplayFor(modelItem => klant.Naam)</a>
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.StartDatum)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.EindDatum)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Opzegtermijn)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Randvoorwaarden)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Tarief)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Kosten)
+                    </td>
+                    <td style="background-color:@item.Verlenging"></td>
+                    <td>
+                        <a asp-action="Verleng" asp-route-id="@item.ContractID">Aanpassen</a> |
+                        <a asp-action="Delete" asp-route-id="@item.ContractID">X</a> |
+                        <a asp-action="Archive" asp-route-id="@item.ContractID">Archiveren</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

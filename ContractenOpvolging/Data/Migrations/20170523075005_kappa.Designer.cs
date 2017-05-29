@@ -9,9 +9,10 @@ using ContractenOpvolging.Models.ContractenModels;
 namespace ContractenOpvolging.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20170523075005_kappa")]
+    partial class kappa
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.1")
@@ -198,8 +199,6 @@ namespace ContractenOpvolging.Data.Migrations
 
                     b.Property<DateTime>("EindDatum");
 
-                    b.Property<string>("Jaar");
-
                     b.Property<string>("Klant");
 
                     b.Property<decimal?>("Kost");
@@ -210,9 +209,11 @@ namespace ContractenOpvolging.Data.Migrations
 
                     b.Property<decimal?>("Tarief");
 
+                    b.Property<string>("jaar");
+
                     b.HasKey("Id");
 
-                    b.ToTable("OudeContracten");
+                    b.ToTable("ContractenArchief");
                 });
 
             modelBuilder.Entity("ContractenOpvolging.Models.ContractVerlengingViewModel", b =>
