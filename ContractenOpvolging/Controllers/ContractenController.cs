@@ -9,6 +9,7 @@ using ContractenOpvolging.Data;
 using ContractenOpvolging.Models.ContractenModels;
 using Microsoft.AspNetCore.Authorization;
 using ContractenOpvolging.Models;
+using System.Reflection;
 
 namespace ContractenOpvolging.Controllers
 {
@@ -28,37 +29,37 @@ namespace ContractenOpvolging.Controllers
                                        .Include(c => c.Klant);
         }
 
-        private async Task<List<Contract>> GetContractenByDate()
+        public async Task<List<Contract>> GetContractenByDate()
         {
 
             return await ContractenQuery().OrderBy(c => c.EindDatum)
                                           .ToListAsync();
         }
 
-        private async Task<List<Contract>> GetContractenByDateDesc()
+        public async Task<List<Contract>> GetContractenByDateDesc()
         {
             return await ContractenQuery().OrderByDescending(c => c.EindDatum)
                                           .ToListAsync();
         }
 
-        private async Task<List<Klant>> GetKlanten()
+        public async Task<List<Klant>> GetKlanten()
         {
             return await _context.Klanten.ToListAsync();
         }
 
-        private async Task<List<Contract>> GetContractenByNameDesc()
+        public async Task<List<Contract>> GetContractenByNameDesc()
         {
             return await ContractenQuery().OrderByDescending(c => c.Consultant.Familienaam)
                                           .ToListAsync();
         }
 
-        private async Task<List<Contract>> GetContractenByKlant()
+        public async Task<List<Contract>> GetContractenByKlant()
         {
             return await ContractenQuery().OrderBy(c => c.Klant.Naam)
                                           .ToListAsync();
         }
 
-        private async Task<List<Contract>> GetcontractenByKlantDesc()
+        public async Task<List<Contract>> GetcontractenByKlantDesc()
         {
             return await ContractenQuery().OrderByDescending(c => c.Klant.Naam)
                                           .ToListAsync();
@@ -107,6 +108,18 @@ namespace ContractenOpvolging.Controllers
         {
             return await ContractenQuery().OrderByDescending(c => c.Verlenging)
                                           .ThenBy(c => c.Consultant.Familienaam)
+                                          .ToListAsync();
+        }
+
+        public async Task<List<Contract>> GetContractenByStartDate()
+        {
+            return await ContractenQuery().OrderBy(c => c.StartDatum)
+                                          .ToListAsync();
+        }
+
+        public async Task<List<Contract>> GetContractenByStartDateDesc()
+        {
+            return await ContractenQuery().OrderByDescending(c => c.StartDatum)
                                           .ToListAsync();
         }
 
@@ -375,81 +388,45 @@ namespace ContractenOpvolging.Controllers
         public async Task<IActionResult> ContractenDetails(string id)
         {
             //viewbags voor filters en voor de business partner
+            //belangrijk de strings moeten overeen komen met de methodnames voor de SorteerLijst method
             ViewBag.KlantenLijst = await GetKlanten();
-            ViewBag.NameSortPar = string.IsNullOrEmpty(id) ? "name_desc" : "";
-            ViewBag.DateSortPar = id == "date" ? "date_desc" : "date";
-            ViewBag.KlantSorPar = id == "klant" ? "klant_desc" : "klant";
-            ViewBag.TariefSorPar = id == "tarief" ? "tarief_desc" : "tarief";
-            ViewBag.KostenSorPar = id == "kosten" ? "kosten_desc" : "kosten";
-            ViewBag.VerlengSorPar = id == "verleng" ? "verleng_desc" : "verleng";
+            ViewBag.NameSortPar = string.IsNullOrEmpty(id) ? "NameDesc" : "";
+            ViewBag.DateSortPar = id == "Date" ? "DateDesc" : "Date";
+            ViewBag.KlantSorPar = id == "Klant" ? "KlantDesc" : "Klant";
+            ViewBag.TariefSorPar = id == "Tarief" ? "TariefDesc" : "Tarief";
+            ViewBag.KostenSorPar = id == "Kost" ? "KostDesc" : "Kost";
+            ViewBag.VerlengSorPar = id == "Verlenging" ? "VerlengingDesc" : "Verlenging";
+            ViewBag.StartDateSortPar = id == "StartDate" ? "StartDateDesc" : "StartDate";
+            ViewBag.BusParSortPar = id == "busPar" ? "busPar_desc" : "busPar";
             List<Contract> contracten;
-            if (id == null)
+            if (id == null || id == "")
             {
                  contracten = await GetContractenByName();
             }
             else
             {
-                 contracten = await SorteerDeLijstAsync(id);
+                try
+                {
+                    contracten = await SorteerLijst(id);
+                }
+                catch
+                {
+                    //indien er iets foutloopt met de zoekstring
+                    ViewBag.SortError = "Er is iets misgelopen bij het sorteren";
+                    return RedirectToAction("ContractenDetails", null);
+                }
             }
             return View(contracten);
         }
 
-        private async Task<List<Contract>> SorteerDeLijstAsync(string sortId)
+        private async Task<List<Contract>> SorteerLijst(string sortId)
         {
-            //switch voor de filterparameters
-            List<Contract> contracten;
-            switch (sortId)
-            {
-                case "name_desc":
-                    contracten = await GetContractenByNameDesc();
-                    break;
-
-                case "date":
-                    contracten = await GetContractenByDate();
-                    break;
-
-                case "date_desc":
-                    contracten = await GetContractenByDateDesc();
-                    break;
-
-                case "klant":
-                    contracten = await GetContractenByKlant();
-                    break;
-
-                case "klant_desc":
-                    contracten = await GetcontractenByKlantDesc();
-                    break;
-
-                case "tarief":
-                    contracten = await GetContractenByTarief();
-                    break;
-
-                case "tarief_desc":
-                    contracten = await GetContractenByTariefDesc();
-                    break;
-
-                case "kosten":
-                    contracten = await GetContractenByKost();
-                    break;
-
-                case "kosten_desc":
-                    contracten = await GetContractenByKostDesc();
-                    break;
-
-                case "verleng":
-                    contracten = await GetContractenByVerlenging();
-                    break;
-
-                case"verleng_desc":
-                    contracten = await GetContractenByVerlengingDesc();
-                    break;
-
-                default:
-                    contracten = await GetContractenByName();
-                    break;
-            }
-            return contracten;
+            var methodName = "GetContractenBy" + sortId;
+            var type = this.GetType();
+            var methodInfo = type.GetMethod(methodName);
+            return await (Task<List<Contract>>) methodInfo.Invoke(this, null);
         }
+
 
         private string ZoekTargetPagina()
         {

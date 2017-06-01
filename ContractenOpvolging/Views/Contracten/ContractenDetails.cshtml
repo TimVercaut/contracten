@@ -10,10 +10,18 @@
     string TariefSorPar = ViewBag.TariefSorPar;
     string KostenSorPar = ViewBag.KostenSorPar;
     string VerlengSorPar = ViewBag.VerlengSorPar;
+    string StartDateSortPar = ViewBag.StartDateSortPar;
     List<Klant> klantLijst = ViewBag.KlantenLijst;
 }
 
 <h2>Contracten - Admin</h2>
+
+@{
+    if(ViewBag.SortError != null)
+    {
+        <p class="danger">@ViewBag.SortError</p>
+    }
+ }
 
 <p>
     <a asp-action="Create" class="btn-bracketed">Nieuw Contract</a>
@@ -37,7 +45,7 @@
                     @Html.DisplayNameFor(model => model.OnderKlant) 
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.StartDatum) 
+                    <a asp-action="ContractenDetails" asp-route-id="@StartDateSortPar"> @Html.DisplayNameFor(model => model.StartDatum) </a>
                 </th>
                 <th>
                     <a asp-action="ContractenDetails" asp-route-id="@DateSortPar">@Html.DisplayNameFor(model => model.EindDatum) </a>
