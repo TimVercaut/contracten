@@ -22,7 +22,7 @@ namespace ContractenOpvolging.Controllers
             _context = context;
         }
 
-        private IQueryable<Contract> GetContractenBase(string query = "")
+        private IQueryable<Contract> ContractenQuery(string query = "")
         {
             return  _context.Contracten.Include(c => c.Consultant)
                                        .Include(c => c.Klant);
@@ -31,14 +31,14 @@ namespace ContractenOpvolging.Controllers
         private async Task<List<Contract>> GetContractenByDate()
         {
 
-            return await GetContractenBase().OrderBy(c => c.EindDatum)
-                                            .ToListAsync();
+            return await ContractenQuery().OrderBy(c => c.EindDatum)
+                                          .ToListAsync();
         }
 
         private async Task<List<Contract>> GetContractenByDateDesc()
         {
-            return await GetContractenBase().OrderByDescending(c => c.EindDatum)
-                                            .ToListAsync();
+            return await ContractenQuery().OrderByDescending(c => c.EindDatum)
+                                          .ToListAsync();
         }
 
         private async Task<List<Klant>> GetKlanten()
@@ -48,16 +48,66 @@ namespace ContractenOpvolging.Controllers
 
         private async Task<List<Contract>> GetContractenByNameDesc()
         {
-            return await GetContractenBase().OrderByDescending(c => c.Consultant.Familienaam)
-                                            .ToListAsync();
+            return await ContractenQuery().OrderByDescending(c => c.Consultant.Familienaam)
+                                          .ToListAsync();
+        }
+
+        private async Task<List<Contract>> GetContractenByKlant()
+        {
+            return await ContractenQuery().OrderBy(c => c.Klant.Naam)
+                                          .ToListAsync();
+        }
+
+        private async Task<List<Contract>> GetcontractenByKlantDesc()
+        {
+            return await ContractenQuery().OrderByDescending(c => c.Klant.Naam)
+                                          .ToListAsync();
         }
 
         public async Task<List<Contract>> GetContractenByName(string query = "")
         {
 
-            return await GetContractenBase().Where(c => c.Consultant.Familienaam.StartsWith(query))
-                                            .OrderBy(c => c.Consultant.Familienaam)
-                                            .ToListAsync();
+            return await ContractenQuery().Where(c => c.Consultant.Familienaam.StartsWith(query))
+                                          .OrderBy(c => c.Consultant.Familienaam)
+                                          .ToListAsync();
+        }
+
+        public async Task<List<Contract>> GetContractenByTarief()
+        {
+            return await ContractenQuery().OrderBy(c => c.Tarief)
+                                          .ToListAsync();
+        }
+
+        public async Task<List<Contract>> GetContractenByTariefDesc()
+        {
+            return await ContractenQuery().OrderByDescending(c => c.Tarief)
+                                          .ToListAsync();
+        }
+
+        public async Task<List<Contract>> GetContractenByKost()
+        {
+            return await ContractenQuery().OrderBy(c => c.Kosten)
+                                          .ToListAsync();
+        }
+
+        public async Task<List<Contract>> GetContractenByKostDesc()
+        {
+            return await ContractenQuery().OrderByDescending(c => c.Kosten)
+                                          .ToListAsync();
+        }
+
+        public async Task<List<Contract>> GetContractenByVerlenging()
+        {
+            return await ContractenQuery().OrderBy(c => c.Verlenging)
+                                          .ThenBy(c => c.Consultant.Familienaam)
+                                          .ToListAsync();
+        }
+
+        public async Task<List<Contract>> GetContractenByVerlengingDesc()
+        {
+            return await ContractenQuery().OrderByDescending(c => c.Verlenging)
+                                          .ThenBy(c => c.Consultant.Familienaam)
+                                          .ToListAsync();
         }
 
         // GET: Contracten
@@ -328,6 +378,10 @@ namespace ContractenOpvolging.Controllers
             ViewBag.KlantenLijst = await GetKlanten();
             ViewBag.NameSortPar = string.IsNullOrEmpty(id) ? "name_desc" : "";
             ViewBag.DateSortPar = id == "date" ? "date_desc" : "date";
+            ViewBag.KlantSorPar = id == "klant" ? "klant_desc" : "klant";
+            ViewBag.TariefSorPar = id == "tarief" ? "tarief_desc" : "tarief";
+            ViewBag.KostenSorPar = id == "kosten" ? "kosten_desc" : "kosten";
+            ViewBag.VerlengSorPar = id == "verleng" ? "verleng_desc" : "verleng";
             List<Contract> contracten;
             if (id == null)
             {
@@ -342,6 +396,7 @@ namespace ContractenOpvolging.Controllers
 
         private async Task<List<Contract>> SorteerDeLijstAsync(string sortId)
         {
+            //switch voor de filterparameters
             List<Contract> contracten;
             switch (sortId)
             {
@@ -355,6 +410,38 @@ namespace ContractenOpvolging.Controllers
 
                 case "date_desc":
                     contracten = await GetContractenByDateDesc();
+                    break;
+
+                case "klant":
+                    contracten = await GetContractenByKlant();
+                    break;
+
+                case "klant_desc":
+                    contracten = await GetcontractenByKlantDesc();
+                    break;
+
+                case "tarief":
+                    contracten = await GetContractenByTarief();
+                    break;
+
+                case "tarief_desc":
+                    contracten = await GetContractenByTariefDesc();
+                    break;
+
+                case "kosten":
+                    contracten = await GetContractenByKost();
+                    break;
+
+                case "kosten_desc":
+                    contracten = await GetContractenByKostDesc();
+                    break;
+
+                case "verleng":
+                    contracten = await GetContractenByVerlenging();
+                    break;
+
+                case"verleng_desc":
+                    contracten = await GetContractenByVerlengingDesc();
                     break;
 
                 default:

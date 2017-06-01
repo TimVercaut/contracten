@@ -24,38 +24,41 @@
 
         <div class="col-md-3">
             <form asp-controller="Contracten" asp-action="MaandenAanpassen" method="post">
-                    <input type="text" name="query" value="" class="search-query" placeholder="Geef aantal maanden" />
-                    <input type="submit" value="Pas aan" class="btn btn-sm"/>
+                <input type="text" name="query" value="" class="search-query" placeholder="Geef aantal maanden" />
+                <input type="submit" value="Pas aan" class="btn btn-sm" />
             </form>
         </div>
     </div>
 </div>
-
-<table class="table" id="tabel">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Consultant)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Klant)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.OnderKlant)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.EindDatum)
-            </th>
-            @{
-                for (int i = 0; i < maxMaanden; i++)
-                {
-                    <th style="text-align:right">@DateTime.Now.AddMonths(i).ToString("MMM", CultureInfo.InvariantCulture)</th>
+<div class="table-responsive">
+    <table class="table table-bordered" id="tabel">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Consultant)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Consultant.Tel)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Klant)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.OnderKlant)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.EindDatum)
+                </th>
+                @{
+                    for (int i = 0; i < maxMaanden; i++)
+                    {
+                        <th style="text-align:right">@DateTime.Now.AddMonths(i).ToString("MMM", CultureInfo.InvariantCulture)</th>
+                    }
                 }
-            }
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
             {
                 Klant klant;
                 if (item.OnderKlant != null || item.OnderKlant != -1)
@@ -73,6 +76,9 @@
                         <a asp-controller="Consultants" asp-action="Details" asp-route-id="@item.ConsultantID">@Html.DisplayFor(modelItem => item.Consultant.Naam)</a>
                     </td>
                     <td>
+                        @Html.DisplayFor(modelItem => item.Consultant.Tel)
+                    </td>
+                    <td>
                         <a asp-controller="Klanten" asp-action="Details" asp-route-id="@item.KlantID">@Html.DisplayFor(modelItem => item.Klant.Naam)</a>
                     </td>
                     <td>
@@ -85,20 +91,20 @@
                     @{
                         for (var i = 0; i < maxMaanden; i++)
                         {
-                            var maand = DateTime.Now.AddMonths(i).Month;
+                            int maand = DateTime.Now.AddMonths(i).Month;
                             var jaar = DateTime.Now.AddMonths(i).Year;
-                            if (item.CheckValid(maand,jaar))
+                            if (item.CheckValid(maand, jaar))
                             {
-                                <td style="background-color:@item.Verlenging"></td>
+                                <td style="background-color:lightblue"></td>
                             }
                             else
                             {
-                                <td style="background-color:white"></td>
-
+                                <td style="background-color:@item.Verlenging"></td>
                             }
                         }
                     }
                 </tr>
                         }
-    </tbody>
-</table>
+        </tbody>
+    </table>
+</div>

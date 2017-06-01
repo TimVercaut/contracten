@@ -3,8 +3,13 @@
 
 @{
     ViewData["Title"] = "ContractenDetails";
+    //Filterstrings
     string NameSortPar = ViewBag.NameSortPar;
     string DateSortPar = ViewBag.DateSortPar;
+    string KlantSortPar = ViewBag.KlantSorPar;
+    string TariefSorPar = ViewBag.TariefSorPar;
+    string KostenSorPar = ViewBag.KostenSorPar;
+    string VerlengSorPar = ViewBag.VerlengSorPar;
     List<Klant> klantLijst = ViewBag.KlantenLijst;
 }
 
@@ -26,7 +31,7 @@
                     <a asp-action="ContractenDetails" asp-route-id="@NameSortPar">@Html.DisplayNameFor(model => model.Consultant) </a>
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.Klant) 
+                    <a asp-action="ContractenDetails" asp-route-id="@KlantSortPar">@Html.DisplayNameFor(model => model.Klant) </a> 
                 </th>
                 <th>
                     @Html.DisplayNameFor(model => model.OnderKlant) 
@@ -44,13 +49,13 @@
                     @Html.DisplayNameFor(model => model.Randvoorwaarden) 
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.Tarief) 
+                    <a asp-action="ContractenDetails" asp-route-id="@TariefSorPar">@Html.DisplayNameFor(model => model.Tarief) </a> 
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.Kosten) 
+                    <a asp-action="ContractenDetails" asp-route-id="@KostenSorPar">@Html.DisplayNameFor(model => model.Kosten)</a>
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.Verlenging) 
+                    <a asp-action="ContractenDetails" asp-route-id="@VerlengSorPar">@Html.DisplayNameFor(model => model.Verlenging) </a>
                 </th>
                 <th></th>
             </tr>

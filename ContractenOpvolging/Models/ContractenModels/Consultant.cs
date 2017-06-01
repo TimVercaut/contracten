@@ -17,7 +17,7 @@ namespace ContractenOpvolging.Models.ContractenModels
         [Required]
         public string Familienaam { get; set; }
         [DataType(DataType.PhoneNumber)]
-        public string Telefoon { get; set; }
+        public string Tel { get; set; }
         [DataType(DataType.EmailAddress)]
         public string Email { get; set; }
         public SoortConsultant Soort { get; set; }
