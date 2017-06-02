@@ -59,7 +59,7 @@ namespace ContractenOpvolging.Controllers
                                           .ToListAsync();
         }
 
-        public async Task<List<Contract>> GetcontractenByKlantDesc()
+        public async Task<List<Contract>> GetContractenByKlantDesc()
         {
             return await ContractenQuery().OrderByDescending(c => c.Klant.Naam)
                                           .ToListAsync();
@@ -123,6 +123,15 @@ namespace ContractenOpvolging.Controllers
                                           .ToListAsync();
         }
 
+        public async Task<List<Contract>> GetContractenByBusPar()
+        {
+            var keke = ContractenQuery().OrderBy(c => c.Klant.Naam)
+                                        .Where(c => c.OnderKlant != null)
+                                        .ToListAsync();
+
+            return await keke;
+        }
+
         // GET: Contracten
         public async Task<IActionResult> Index()
         {
@@ -136,8 +145,10 @@ namespace ContractenOpvolging.Controllers
 
         public async Task<IActionResult> Grafisch()
         {
+            //default aantal maanden in de View dat zichtbaar is te beginnen van de huidige maand
+            var aantalMaanden = 8;
             ViewBag.KlantenLijst = await GetKlanten();
-            ViewBag.Maanden = 6;
+            ViewBag.Maanden = aantalMaanden;
             return View(await GetContractenByDate());
         }
 
